@@ -1,0 +1,17 @@
+﻿List of released Qwin versions
+==============================
+ _________________________________________________________________________________
+| Package name            | Release notes                                         |
+|-------------------------|-------------------------------------------------------|
+| qwin-0.6-ko.xpi         | * implemented numeric keyset                          |
+|                         | * implemented tree sorting                            |
+|                         | * added users preferences dialog                      |
+|                         | * allow placement of Qwin also in the right sidebar   |  
+|-------------------------|-------------------------------------------------------|
+| qwin-0.5.1-ko.xpi       | * implemented new type of view (".../src/src.c")      |
+|                         | * updated views numbering (now from 1 not from 0)     |
+|                         | * released on "http://community.activestate.com/      |
+|                         |   komodo-extension/qwin-extension"                    |
+|-------------------------|-------------------------------------------------------|
+| qwin-0.5-ko.xpi         | * first publicly released version                     |
+|_________________________|_______________________________________________________|

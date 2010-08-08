@@ -1,0 +1,46 @@
+﻿Hey Ondrej,
+
+Nice, nice! Installed and using it!
+
+Only tiny bit: start the numbering from 1, they're now out of sync
+with the F keys.
+As I see the code I guess you're in trouble with mapping the plain
+number keys with the modifiers to the list items. I think a small
+lookup table might help there.
+That might allow to map "-", "=", "\" for 11, 12, 13 of course only
+for english keyboard layout.
+
+Paths shown in the list: might be that some hybrid solution is the way
+to go. Because the full path will never fit that place for me and
+filename only is too similar. I'm developing with Zope, there are lots
+of similar filenames in different folders. And folders are deeeeeep.
+Idea: let the options "just filename", "fullname" stay, add a "hybrid"
+Where hybrid means:
+ - until there are unique filenames display just the filename
+ - at the moment two similat filenames would appear, start to display
+  their non-similar parts, like:
+  1 U:\zope_org\xzope\app\boston\__init__.py
+  2 U:\zope_org\xzope\app\boston\browser\__init__.py
+  3 U:\zope_org\xzope\app\broken\__init__.py
+  ...
+  8 U:\zope_org\xzope\app\boston\browser\__init__.py
+  would display:
+  1 boston\__init__.py
+  2 boston\browser\__init__.py
+  3 broken\__init__.py
+  ...
+  8 boston\browser\__init__.py
+  (note that the debugger likes to open the very same file twice!)
+  Not much better....
+
+Another idea: (cut the crap option)
+ Is it possible to put the "..." somehow at the from of the list
+ items (instead of the end)? Like:
+ "...on\browser\__init__.py"
+ I guess exactly not, usually frameworks do this on their own so the
+ only solution might be to do it in qwin, but how to have some idea
+ how many characters to display?
+ The Projects tab does it like "test_...ct.py" that's also not the
+ best choice...
+
+Good job, thanks a lot!

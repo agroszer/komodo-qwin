@@ -1,0 +1,8 @@
+<!ENTITY appName "Qwin">
+<!ENTITY appFullName "Qwin">
+<!ENTITY appShortName "qwin">
+<!ENTITY appDescription "Simplify switching between opened documents.">
+<!ENTITY appVersion "0.6.2">
+<!ENTITY appUrl "http://www.ondrejd.com/projects/qwin">
+<!ENTITY vendorName "Ondřej Doněk">
+<!ENTITY vendorUrl "http://www.ondrejd.com/">

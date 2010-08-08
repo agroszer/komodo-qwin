@@ -1,0 +1,101 @@
+
+<!ENTITY qwinTab.label             "Qwin">
+<!ENTITY qwinTab.tip               "Show tab with Qwin">
+
+<!-- Sidebar -->
+<!ENTITY prefsBtn.label            " Options">
+<!ENTITY prefsBtn.key              "O">
+<!ENTITY sidebarTreeCol1.label     "#">
+<!ENTITY sidebarTreeCol1.tip       "Index according to when was the view opened">
+<!ENTITY sidebarTreeCol2.label     "Name">
+<!ENTITY sidebarTreeCol2.tip       "Name of the view">
+
+<!-- Tree context menu -->
+<!ENTITY showViewCmd.label         "Show view">
+<!ENTITY showViewCmd.key           "S">
+<!ENTITY showViewCmd.tip           "Show selected view">
+<!ENTITY closeViewCmd.label        "Close view">
+<!ENTITY closeViewCmd.key          "C">
+<!ENTITY closeViewCmd.tip          "Close selected view">
+<!ENTITY showPropsDlgCmd.label     "Properties">
+<!ENTITY showPropsDlgCmd.key       "P">
+<!ENTITY showPropsDlgCmd.tip       "Show document properties">
+<!ENTITY mvToOtherTabGrpCmd.label  "Move to other tab group">
+<!ENTITY mvToOtherTabGrpCmd.key    "t">
+<!ENTITY mvToOtherTabGrpCmd.tip    "Move selected view to other tab group">
+<!ENTITY closeAllOthersCmd.label   "Close All Others">
+<!ENTITY closeAllOthersCmd.key     "O">
+<!ENTITY closeAllOthersCmd.tip     "Close all other opened views excluding selected one and Start Page">
+<!ENTITY closeAllCmd.label         "Close All">
+<!ENTITY closeAllCmd.key           "A">
+<!ENTITY closeAllCmd.tip           "Close all opened views excluding Start Page">
+
+<!-- Preferences dialog -->
+<!ENTITY prefWindow.title          "Preferences">
+<!ENTITY paneGeneral.label         "General">
+<!ENTITY paneGeneral.key           "G">
+
+<!ENTITY enableQwinPref.label      "Enable Qwin">
+<!ENTITY enableQwinPref.key        "E">
+<!ENTITY usedModifierPref.label    "Modifier:">
+<!ENTITY usedModifierPref.key      "M">
+<!ENTITY usedModifierVal1.label    "none">
+<!ENTITY usedKeysetPref.label      "Keyset:">
+<!ENTITY usedKeysetPref.key        "K">
+<!ENTITY usedKeysetVal1.label      "Plain numbers, 1..0 (0 as 10)">
+<!ENTITY usedKeysetVal2.label      "F-number keys, F1..F12">
+<!ENTITY displayWherePref.label    "Position:">
+<!ENTITY displayWherePref.key      "P">
+<!ENTITY displayWhereVal1.label    "Left sidebar">
+<!ENTITY displayWhereVal2.label    "Right sidebar">
+<!ENTITY displayPathsPref.label    "Display:">
+<!ENTITY displayPathsPref.key      "D">
+
+<!ENTITY show_full_paths.label     "Show full paths">
+<!ENTITY show_only_filenames.label "Only file names">
+<!ENTITY last_x_chars.label        "Last X characters">
+<!ENTITY how_many_chars.label      "How many characters display: ">
+<!ENTITY how_many_chars.key        "w">
+<!ENTITY highlight_current.label   "Highlight current document">
+<!ENTITY highlight_current.key     "H">
+<!ENTITY highlight_current.tip     "Highlight currently focused document?">
+<!ENTITY show_icons.label          "Show icons">
+<!ENTITY show_icons.label          "S">
+<!ENTITY show_icons.tip            "Show icons of document type?">
+<!ENTITY highlight_unsaved.label   "Highlight unsaved documents">
+<!ENTITY highlight_unsaved.key     "u">
+<!ENTITY highlight_unsaved.type1   "With asterix">
+<!ENTITY highlight_unsaved.type2   "With italic">
+<!ENTITY highlight_unsaved.type3   "With underline">
+<!ENTITY highlight_unsaved.type4   "With color">
+<!ENTITY highlight_unsaved_c.label "Color…">
+<!ENTITY highlight_unsaved_c.key   "l">
+<!ENTITY show_web_pages.label      "Show web pages">
+<!ENTITY show_web_pages.tip        "Show opened web pages in the Qwin tree?">
+<!ENTITY show_start_page.label     "Show Start page">
+<!ENTITY show_start_page.tip       "Show Start page in the Qwin tree?">
+<!ENTITY only_active_project.label "Only active project items">
+<!ENTITY only_active_project.tip   "Show only items from the active project?">
+<!ENTITY show_views_groups.label   "Show views groups">
+<!ENTITY show_views_groups.key     "u">
+<!ENTITY show_views_groups.tip     "Split views according to current views groups">
+
+<!ENTITY tabSwitching.label        "Tab switching">
+<!ENTITY completion.label          "Completion">
+<!ENTITY enableCompletion.label    "Enable Completion">
+<!ENTITY clipboard.label           "Clipboard watcher">
+<!ENTITY enableClipboard.label     "Enable Clipboard watcher">
+
+<!ENTITY completionMinWordLength.label "Minimum word length">
+<!ENTITY completionSpeed.label      "Completion speed (ms)*">
+<!ENTITY completionSpeed.tip        "Komodo Restart required">
+<!ENTITY completionItems.label      "Max. number of items*">
+<!ENTITY completionItems.tip        "Komodo Restart required">
+<!ENTITY completionIgnoreCase.label "Ignore case">
+<!ENTITY completionIgnoreCase.tip   "Ignore case on text matching">
+<!ENTITY completionLookHistory.label "Look into other open files">
+<!ENTITY completionLookHistory.tip   "Look into other open files if not enough matches">
+<!ENTITY clipboardItems.label      "Max. number of items*">
+<!ENTITY clipboardItems.tip        "Komodo Restart required">
+
+<!ENTITY last_inserted.label      "Last: ">

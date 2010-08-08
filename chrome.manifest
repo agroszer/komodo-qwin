@@ -1,0 +1,4 @@
+content qwin jar:qwin.jar!/content/ xpcnativewrappers=yes
+locale qwin en-US jar:qwin.jar!/locale/en-US/
+skin qwin classic/1.0 jar:qwin.jar!/skin/
+overlay chrome://komodo/content/komodo.xul chrome://qwin/content/overlay.xul

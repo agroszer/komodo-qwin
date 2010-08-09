@@ -251,9 +251,8 @@ TODO:
 
         <vbox id="qwin-left-bottom-box" flex="1"
               persist="collapsed height">
-          <caption label="Completion:" />
           <hbox>
-            <label value="&last_inserted.label;"/>
+            <label value="Co.:"/>
             <textbox id="qwin-left-last_inserted"
                      disabled="true"/>
           </hbox>
@@ -343,9 +342,8 @@ TODO:
 
         <vbox id="qwin-right-bottom-box" flex="1"
               persist="collapsed height">
-          <caption label="Completion:" />
           <hbox>
-            <label value="&last_inserted.label;"/>
+            <label value="Co.:"/>
             <textbox id="qwin-right-last_inserted"
                      disabled="true"/>
           </hbox>

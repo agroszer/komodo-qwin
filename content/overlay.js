@@ -1284,9 +1284,13 @@ ko.extensions.qwin = {};
     try {
         if (!ko.extensions.qwin.prefs.enableClipboard) return;
 
-        xtk.include("clipboard");
+        try {
+            xtk.include("clipboard");
 
-        var clipTxt = xtk.clipboard.getText();
+            var clipTxt = xtk.clipboard.getText();
+        } catch (e) {
+            var clipTxt = null;
+        }
 
         if (clipTxt) {
             var found = false;

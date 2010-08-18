@@ -1220,7 +1220,6 @@ ko.extensions.qwin = {};
   this.reloadClipboardTree = function()
   {
     try {
-        log.warn("reloadClipboardTree");
         if (!ko.extensions.qwin.prefs.enableClipboard) return;
 
         var words  = new Array();

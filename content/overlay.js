@@ -1668,6 +1668,120 @@ ko.extensions.qwin = {};
     }
   }; // end closeAllOtherViews()
 
+  this.onHotkeyGotoTab = function()
+  {
+    try {
+        // Clear any existing line information.
+        var gotoTabTextbox = document.getElementById('gotoTab_textbox');
+        gotoTabTextbox.value = "";
+        // Get the current scintilla position.
+        var currentView = ko.views.manager.currentView;
+        /** @type {Components.interfaces.ISciMoz} */
+        var scimoz = currentView.scimoz;
+        var middleLine = scimoz.firstVisibleLine + (scimoz.linesOnScreen / 2) - 5;
+        var pos = scimoz.positionFromLine(middleLine);
+        var x = scimoz.pointXFromPosition(pos);
+        var y = scimoz.pointYFromPosition(pos);
+        // Show the goto line panel/popup.
+        var panel = document.getElementById("gotoTab_panel");
+        panel.openPopup(ko.views.manager.currentView, "after_pointer", x, y);
+    } catch(e) {
+      log.exception(e);
+    }
+  };
+
+  this.onHotkeyGotoTab_onkeypress_handler = function (event)
+  {
+    try {
+      if (event.keyCode != event.DOM_VK_ENTER &&
+          event.keyCode != event.DOM_VK_RETURN) {
+          return;
+      }
+      // Stop the event from being consumed by Komodo's keybinding manager.
+      event.preventDefault();
+      event.stopPropagation();
+
+      var gotoTabTextbox = document.getElementById("gotoTab_textbox");
+      var tabnumber = gotoTabTextbox.value;
+      if (!tabnumber)
+          return;
+
+      // Parse the tabnumber, creates [sign, num] variables for the given tabnumber string.
+      //   42     sign=null, num=42
+      //   +1     sign=+, num=1
+      //   a      sign=null, num=NaN
+      var stripped = tabnumber.replace(/(^\s*|\s*$)/g, '');
+      var sign = null;
+      var num;
+      if (stripped[0] == "-" || stripped[0] == "+") {
+          sign = stripped[0];
+          num = parseInt(stripped.substring(1, stripped.length));
+      } else {
+          sign = null;
+          num = parseInt(stripped);
+      }
+      //dump("parseTab(tabnumber="+tabnumber+"): sign="+sign+", num="+num+"\n");
+
+      // Validate the tabnumber:
+      //   Good: 1, 42, +12, -5.
+      //   Bad: a, +1a, -, 3.14
+      var errorBox = document.getElementById('gotoTab_error_hbox');
+      if (isNaN(num) || num < 0) {
+          var errorLabel = document.getElementById('gotoTab_error_label');
+          errorLabel.value = _bundle.formatStringFromName("isInvalidYoumustEnterANumber.alert", [tabnumber], 1);
+          errorBox.removeAttribute("collapsed");
+          return;
+      }
+      errorBox.setAttribute("collapsed", "true");
+
+      var gotoTabPanel = document.getElementById("gotoTab_panel");
+      gotoTabPanel.hidePopup();
+
+      // Go to the given tabnumber.
+
+      var prefix       = ko.extensions.qwin.prefs.displayWhere;
+      var tree         = document.getElementById("qwin-" + prefix + "-tree");
+
+      if (tabnumber >= 0) {
+        tabnumber--;
+        // Switch the view if requested view was found
+        tree.currentIndex = tabnumber;
+        ko.extensions.qwin.onTreeDblClick(null);
+        return;
+      }
+
+      //var view = ko.views.manager.currentView;
+      //var scimoz = view.scintilla.scimoz;
+      //var currTab;
+      //var targetTab;
+      //switch (sign) {
+      //    case null:
+      //        scimoz.gotoTab(num-1);  // scimoz handles out of bounds
+      //        targetTab = num - 1;
+      //        break;
+      //    case "+":
+      //        currTab = scimoz.tabnumberFromPosition(scimoz.currentPos);
+      //        targetTab = currTab + num;
+      //        break;
+      //    case "-":
+      //        currTab = scimoz.tabnumberFromPosition(scimoz.currentPos);
+      //        targetTab = currTab - num;
+      //        break;
+      //    default:
+      //        log.error("unexpected goto tabnumber 'sign' value: '"+sign+"'")
+      //        targetTab = null;
+      //        break;
+      //}
+      //if (targetTab != null) {
+      //    scimoz.gotoTab(targetTab);
+      //    scimoz.ensureVisible(targetTab);
+      //    scimoz.scrollCaret();
+      //}
+    } catch(e) {
+      log.exception(e);
+    }
+  }
+
 }).apply(ko.extensions.qwin);
 
 // ===========================================================================

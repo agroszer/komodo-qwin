@@ -122,7 +122,34 @@ TODO:
        key="key_qwin_clipboard_item10"
        desc="qwin: insert clipboard item 10"
        oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(10);"/>
+
+
+     <broadcaster
+       id="cmd_qwin_goto_tabnumber"
+       key="key_qwin_goto_tabnumber"
+       desc="qwin: goto tab number x"
+       oncommand="ko.extensions.qwin.onHotkeyGotoTab();"/>
    </broadcasterset>
+
+   <popupset id="editorTooltipSet">
+      <panel id="gotoTab_panel"
+               onpopupshown="document.getElementById('gotoTab_textbox').focus(); document.getElementById('gotoTab_error_hbox').setAttribute('collapsed', 'true'); ">
+            <vbox id="gotoTab_vbox" maxwidth="420">
+                <description id="gotoTab_description">&gotoTab.prompt.description;</description>
+                <hbox id="gotoTab_hbox" align="center">
+                    <label id="gotoTab_label" value="&gotoTab.prompt.label;" />
+                    <textbox id="gotoTab_textbox"
+                             onkeypress="ko.extensions.qwin.onHotkeyGotoTab_onkeypress_handler(event);" />
+                </hbox>
+                <hbox id="gotoTab_error_hbox"
+                      align="center"
+                      collapsed="true">
+                    <image id="gotoTab_error_image" />
+                    <label id="gotoTab_error_label" />
+                </hbox>
+            </vbox>
+      </panel>
+   </popupset>
 
   <popupset id="extensionPopupSet">
     <menupopup id="qwin-tree-contextmenu">

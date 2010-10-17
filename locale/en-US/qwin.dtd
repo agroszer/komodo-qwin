@@ -99,3 +99,7 @@
 <!ENTITY clipboardItems.tip        "Komodo Restart required">
 
 <!ENTITY last_inserted.label      "Last: ">
+
+
+<!ENTITY gotoTab.prompt.description      "Enter a tab number to go to.">
+<!ENTITY gotoTab.prompt.label            "Tab number: ">

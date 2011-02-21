@@ -460,7 +460,9 @@ ko.extensions.qwin = {};
                 for (var j in arr) {
                     var view = arr[j];
                     try {
-                        views.push(view.scimoz);
+                        if (view != null && view.scimoz != null) {
+                            views.push(view.scimoz);
+                        }
                     }
                     catch (e) {
                         //just in case there's no scimoz attr, skip this
@@ -561,6 +563,8 @@ ko.extensions.qwin = {};
             var views = this.getAllOpenDocumentViews();
             //half of the timer setting -- plenty to do left
             var maxTime = (ko.extensions.qwin.prefs.completionSpeed / 1000)/2;
+            
+            //alert(views);
 
             for (var i in views) {
                 var viewScimoz = views[i];

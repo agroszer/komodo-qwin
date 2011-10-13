@@ -380,7 +380,7 @@ ko.extensions.qwin = {};
   function QwinTreeitemPrototype(aIndex, aLabel, aFullPath, aBaseName,
                                  aIsDirty, aType)
   {
-    this.index    = aIndex;
+    this.index    = ko.extensions.qwin.indexMaker(aIndex);
     this.label    = aLabel;
     this.fullPath = aFullPath;
     this.baseName = aBaseName;
@@ -563,7 +563,7 @@ ko.extensions.qwin = {};
             var views = this.getAllOpenDocumentViews();
             //half of the timer setting -- plenty to do left
             var maxTime = (ko.extensions.qwin.prefs.completionSpeed / 1000)/2;
-            
+
             //alert(views);
 
             for (var i in views) {
@@ -893,7 +893,7 @@ ko.extensions.qwin = {};
 
 
   /**
-   * Observer imnplementation. We observe changes in views (opening, closing).
+   * Observer implementation. We observe changes in views (opening, closing).
    *
    * @param aSubject {string}
    * @param aTopic {string}
@@ -926,6 +926,22 @@ ko.extensions.qwin = {};
     } catch(e) {
       log.exception(e);
     }
+  };
+
+  this.indexMaker = function(index)
+  {
+    try {
+      if (index <= 10) {
+        return index;
+      } else {
+        // 11a
+        // 12b
+        return index + String.fromCharCode(index-11+97);
+      }
+    } catch(e) {
+      log.exception(e);
+    }
+    return index;
   };
 
   /**
@@ -1241,7 +1257,7 @@ ko.extensions.qwin = {};
         words.reverse();
         var index = 1;
         for (var i in words) {
-            words[i].index = index;
+            words[i].index = this.indexMaker(index);
             index ++;
         }
 
@@ -1282,15 +1298,32 @@ ko.extensions.qwin = {};
     }
   }; // end onTimer(aPrefix)
 
+  this.addToClipboardHistory = function(text)
+  {
+    try {
+        // TODO: implement some LRU
+        ko.extensions.qwin.clipboardHistory.push(text);
+        this.reloadClipboardTree();
+    } catch(e) {
+      log.exception(e);
+    }
+  };
+
   this.onClipboardTimer = function()
   {
     try {
         if (!ko.extensions.qwin.prefs.enableClipboard) return;
 
+        var startTime = timeSvc.time();
+
         try {
             xtk.include("clipboard");
 
             var clipTxt = xtk.clipboard.getText();
+            // don't store brutally long entries
+            if (clipTxt.length > 40960) {
+                clipTxt = null;
+            }
         } catch (e) {
             var clipTxt = null;
         }
@@ -1306,10 +1339,13 @@ ko.extensions.qwin = {};
             }
 
             if (!found) {
-                ko.extensions.qwin.clipboardHistory.push(clipTxt);
-                this.reloadClipboardTree();
+                this.addToClipboardHistory(clipTxt);
             }
         }
+
+        var duration = timeSvc.time() - startTime;
+        var msg = "onClipboardTimer in "+duration;
+        //log.warn(msg);
 
     } catch(e) {
       log.exception(e);
@@ -1396,6 +1432,7 @@ ko.extensions.qwin = {};
       sm.replaceSel(newword)
 
       ko.extensions.qwin.lastInsertedWord = newword;
+      ko.extensions.qwin.addToClipboardHistory(newword);
       var prefix    = ko.extensions.qwin.prefs.displayWhere;
       var txtbox    = document.getElementById("qwin-" + prefix + "-last_inserted");
       txtbox.value = newword;
@@ -1594,6 +1631,46 @@ ko.extensions.qwin = {};
   	  log.exception(e);
   	}
   }; // end onKeypress(aEvent)
+
+  this.onHotkeySwitchTab = function(index) {
+    try {
+        var prefix  = ko.extensions.qwin.prefs.displayWhere;
+        var tree    = document.getElementById("qwin-" + prefix + "-tree");
+
+        // do a LAST tab
+        tree.currentIndex = index-1;
+        ko.extensions.qwin.onTreeDblClick(null);
+    } catch (e) {
+        log.exception(e);
+    }
+  }; // end onHotkeySwitchTab
+
+  this.onHotkeyInsertIntelli = function(index) {
+    try {
+        var prefix  = ko.extensions.qwin.prefs.displayWhere;
+        var tree    = document.getElementById("qwin-" + prefix + "-completiontree");
+
+        if (index == 99 && ko.extensions.qwin.lastInsertedWord) {
+            var sm = ko.views.manager.currentView.scimoz;
+
+            sm.beginUndoAction();
+
+            //sm.insertText(sm.currentPos, ko.extensions.qwin.lastInsertedWord)
+            //sm.currentPos = sm.currentPos+ko.extensions.qwin.lastInsertedWord.length
+            sm.replaceSel(ko.extensions.qwin.lastInsertedWord)
+
+            sm.endUndoAction();
+
+            sm.scrollCaret();
+        } else {
+            tree.currentIndex = index-1;
+            ko.extensions.qwin.onCompletionTreeDblClick(null);
+        }
+    } catch (e) {
+        log.exception(e);
+    }
+  }; // end onHotkeyInsertIntelli
+
 
   this.onHotkeyInsertClipboard = function(index) {
     try {

@@ -71,85 +71,345 @@ TODO:
   <script src="chrome://qwin/content/overlay.js"
           type="application/x-javascript"></script>
 
-   <broadcasterset id="broadcasterset_global">
-     <broadcaster
-       id="cmd_qwin_clipboard_item1"
-       key="key_qwin_clipboard_item1"
-       desc="qwin: insert clipboard item 1"
-       oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(1);"/>
-     <broadcaster
-       id="cmd_qwin_clipboard_item2"
-       key="key_qwin_clipboard_item2"
-       desc="qwin: insert clipboard item 2"
-       oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(2);"/>
-     <broadcaster
-       id="cmd_qwin_clipboard_item3"
-       key="key_qwin_clipboard_item3"
-       desc="qwin: insert clipboard item 3"
-       oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(3);"/>
-     <broadcaster
-       id="cmd_qwin_clipboard_item4"
-       key="key_qwin_clipboard_item4"
-       desc="qwin: insert clipboard item 4"
-       oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(4);"/>
-     <broadcaster
-       id="cmd_qwin_clipboard_item5"
-       key="key_qwin_clipboard_item5"
-       desc="qwin: insert clipboard item 5"
-       oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(5);"/>
-     <broadcaster
-       id="cmd_qwin_clipboard_item6"
-       key="key_qwin_clipboard_item6"
-       desc="qwin: insert clipboard item 6"
-       oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(6);"/>
-     <broadcaster
-       id="cmd_qwin_clipboard_item7"
-       key="key_qwin_clipboard_item7"
-       desc="qwin: insert clipboard item 7"
-       oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(7);"/>
-     <broadcaster
-       id="cmd_qwin_clipboard_item8"
-       key="key_qwin_clipboard_item8"
-       desc="qwin: insert clipboard item 8"
-       oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(8);"/>
-     <broadcaster
-       id="cmd_qwin_clipboard_item9"
-       key="key_qwin_clipboard_item9"
-       desc="qwin: insert clipboard item 9"
-       oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(9);"/>
-     <broadcaster
-       id="cmd_qwin_clipboard_item10"
-       key="key_qwin_clipboard_item10"
-       desc="qwin: insert clipboard item 10"
-       oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(10);"/>
+  <broadcasterset id="broadcasterset_global">
+    <broadcaster
+      id="cmd_qwin_clipboard_item1"
+      key="key_qwin_clipboard_item1"
+      desc="qwin: insert clipboard item 1"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(1);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item2"
+      key="key_qwin_clipboard_item2"
+      desc="qwin: insert clipboard item 2"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(2);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item3"
+      key="key_qwin_clipboard_item3"
+      desc="qwin: insert clipboard item 3"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(3);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item4"
+      key="key_qwin_clipboard_item4"
+      desc="qwin: insert clipboard item 4"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(4);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item5"
+      key="key_qwin_clipboard_item5"
+      desc="qwin: insert clipboard item 5"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(5);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item6"
+      key="key_qwin_clipboard_item6"
+      desc="qwin: insert clipboard item 6"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(6);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item7"
+      key="key_qwin_clipboard_item7"
+      desc="qwin: insert clipboard item 7"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(7);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item8"
+      key="key_qwin_clipboard_item8"
+      desc="qwin: insert clipboard item 8"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(8);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item9"
+      key="key_qwin_clipboard_item9"
+      desc="qwin: insert clipboard item 9"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(9);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item10"
+      key="key_qwin_clipboard_item10"
+      desc="qwin: insert clipboard item 10"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(10);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item11"
+      key="key_qwin_clipboard_item11"
+      desc="qwin: insert clipboard item 11"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(11);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item12"
+      key="key_qwin_clipboard_item12"
+      desc="qwin: insert clipboard item 12"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(12);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item13"
+      key="key_qwin_clipboard_item13"
+      desc="qwin: insert clipboard item 13"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(13);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item14"
+      key="key_qwin_clipboard_item14"
+      desc="qwin: insert clipboard item 14"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(14);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item15"
+      key="key_qwin_clipboard_item15"
+      desc="qwin: insert clipboard item 15"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(15);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item16"
+      key="key_qwin_clipboard_item16"
+      desc="qwin: insert clipboard item 16"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(16);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item17"
+      key="key_qwin_clipboard_item17"
+      desc="qwin: insert clipboard item 17"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(17);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item18"
+      key="key_qwin_clipboard_item18"
+      desc="qwin: insert clipboard item 18"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(18);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item19"
+      key="key_qwin_clipboard_item19"
+      desc="qwin: insert clipboard item 19"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(19);"/>
+    <broadcaster
+      id="cmd_qwin_clipboard_item20"
+      key="key_qwin_clipboard_item20"
+      desc="qwin: insert clipboard item 20"
+      oncommand="ko.extensions.qwin.onHotkeyInsertClipboard(20);"/>
 
 
-     <broadcaster
-       id="cmd_qwin_goto_tabnumber"
-       key="key_qwin_goto_tabnumber"
-       desc="qwin: goto tab number x"
-       oncommand="ko.extensions.qwin.onHotkeyGotoTab();"/>
-   </broadcasterset>
+    <broadcaster
+      id="cmd_qwin_intelli_item1"
+      key="key_qwin_intelli_item1"
+      desc="qwin: insert intellisense item 1"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(1);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item2"
+      key="key_qwin_intelli_item2"
+      desc="qwin: insert intellisense item 2"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(2);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item3"
+      key="key_qwin_intelli_item3"
+      desc="qwin: insert intellisense item 3"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(3);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item4"
+      key="key_qwin_intelli_item4"
+      desc="qwin: insert intellisense item 4"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(4);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item5"
+      key="key_qwin_intelli_item5"
+      desc="qwin: insert intellisense item 5"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(5);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item6"
+      key="key_qwin_intelli_item6"
+      desc="qwin: insert intellisense item 6"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(6);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item7"
+      key="key_qwin_intelli_item7"
+      desc="qwin: insert intellisense item 7"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(7);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item8"
+      key="key_qwin_intelli_item8"
+      desc="qwin: insert intellisense item 8"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(8);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item9"
+      key="key_qwin_intelli_item9"
+      desc="qwin: insert intellisense item 9"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(9);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item10"
+      key="key_qwin_intelli_item10"
+      desc="qwin: insert intellisense item 10"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(10);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item11"
+      key="key_qwin_intelli_item11"
+      desc="qwin: insert intellisense item 11"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(11);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item12"
+      key="key_qwin_intelli_item12"
+      desc="qwin: insert intellisense item 12"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(12);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item13"
+      key="key_qwin_intelli_item13"
+      desc="qwin: insert intellisense item 13"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(13);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item14"
+      key="key_qwin_intelli_item14"
+      desc="qwin: insert intellisense item 14"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(14);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item15"
+      key="key_qwin_intelli_item15"
+      desc="qwin: insert intellisense item 15"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(15);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item16"
+      key="key_qwin_intelli_item16"
+      desc="qwin: insert intellisense item 16"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(16);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item17"
+      key="key_qwin_intelli_item17"
+      desc="qwin: insert intellisense item 17"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(17);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item18"
+      key="key_qwin_intelli_item18"
+      desc="qwin: insert intellisense item 18"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(18);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item19"
+      key="key_qwin_intelli_item19"
+      desc="qwin: insert intellisense item 19"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(19);"/>
+    <broadcaster
+      id="cmd_qwin_intelli_item20"
+      key="key_qwin_intelli_item20"
+      desc="qwin: insert intellisense item 20"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(20);"/>
 
-   <popupset id="editorTooltipSet">
-      <panel id="gotoTab_panel"
-               onpopupshown="document.getElementById('gotoTab_textbox').focus(); document.getElementById('gotoTab_error_hbox').setAttribute('collapsed', 'true'); ">
-            <vbox id="gotoTab_vbox" maxwidth="420">
-                <description id="gotoTab_description">&gotoTab.prompt.description;</description>
-                <hbox id="gotoTab_hbox" align="center">
-                    <label id="gotoTab_label" value="&gotoTab.prompt.label;" />
-                    <textbox id="gotoTab_textbox"
-                             onkeypress="ko.extensions.qwin.onHotkeyGotoTab_onkeypress_handler(event);" />
-                </hbox>
-                <hbox id="gotoTab_error_hbox"
-                      align="center"
-                      collapsed="true">
-                    <image id="gotoTab_error_image" />
-                    <label id="gotoTab_error_label" />
-                </hbox>
-            </vbox>
-      </panel>
-   </popupset>
+    <broadcaster
+      id="cmd_qwin_intelli_item99"
+      key="key_qwin_intelli_item99"
+      desc="qwin: insert LAST intellisense item"
+      oncommand="ko.extensions.qwin.onHotkeyInsertIntelli(99);"/>
+
+
+    <broadcaster
+      id="cmd_qwin_tab_item1"
+      key="key_qwin_tab_item1"
+      desc="qwin: switch to tab 1"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(1);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item2"
+      key="key_qwin_tab_item2"
+      desc="qwin: switch to tab 2"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(2);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item3"
+      key="key_qwin_tab_item3"
+      desc="qwin: switch to tab 3"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(3);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item4"
+      key="key_qwin_tab_item4"
+      desc="qwin: switch to tab 4"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(4);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item5"
+      key="key_qwin_tab_item5"
+      desc="qwin: switch to tab 5"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(5);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item6"
+      key="key_qwin_tab_item6"
+      desc="qwin: switch to tab 6"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(6);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item7"
+      key="key_qwin_tab_item7"
+      desc="qwin: switch to tab 7"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(7);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item8"
+      key="key_qwin_tab_item8"
+      desc="qwin: switch to tab 8"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(8);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item9"
+      key="key_qwin_tab_item9"
+      desc="qwin: switch to tab 9"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(9);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item10"
+      key="key_qwin_tab_item10"
+      desc="qwin: switch to tab 10"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(10);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item11"
+      key="key_qwin_tab_item11"
+      desc="qwin: switch to tab 11"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(11);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item12"
+      key="key_qwin_tab_item12"
+      desc="qwin: switch to tab 12"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(12);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item13"
+      key="key_qwin_tab_item13"
+      desc="qwin: switch to tab 13"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(13);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item14"
+      key="key_qwin_tab_item14"
+      desc="qwin: switch to tab 14"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(14);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item15"
+      key="key_qwin_tab_item15"
+      desc="qwin: switch to tab 15"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(15);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item16"
+      key="key_qwin_tab_item16"
+      desc="qwin: switch to tab 16"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(16);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item17"
+      key="key_qwin_tab_item17"
+      desc="qwin: switch to tab 17"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(17);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item18"
+      key="key_qwin_tab_item18"
+      desc="qwin: switch to tab 18"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(18);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item19"
+      key="key_qwin_tab_item19"
+      desc="qwin: switch to tab 19"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(19);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item20"
+      key="key_qwin_tab_item20"
+      desc="qwin: switch to tab 20"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(20);"/>
+
+
+    <broadcaster
+      id="cmd_qwin_goto_tabnumber"
+      key="key_qwin_goto_tabnumber"
+      desc="qwin: goto tab number x"
+      oncommand="ko.extensions.qwin.onHotkeyGotoTab();"/>
+  </broadcasterset>
+
+  <popupset id="editorTooltipSet">
+     <panel id="gotoTab_panel"
+              onpopupshown="document.getElementById('gotoTab_textbox').focus(); document.getElementById('gotoTab_error_hbox').setAttribute('collapsed', 'true'); ">
+           <vbox id="gotoTab_vbox" maxwidth="420">
+               <description id="gotoTab_description">&gotoTab.prompt.description;</description>
+               <hbox id="gotoTab_hbox" align="center">
+                   <label id="gotoTab_label" value="&gotoTab.prompt.label;" />
+                   <textbox id="gotoTab_textbox"
+                            onkeypress="ko.extensions.qwin.onHotkeyGotoTab_onkeypress_handler(event);" />
+               </hbox>
+               <hbox id="gotoTab_error_hbox"
+                     align="center"
+                     collapsed="true">
+                   <image id="gotoTab_error_image" />
+                   <label id="gotoTab_error_label" />
+               </hbox>
+           </vbox>
+     </panel>
+  </popupset>
 
   <popupset id="extensionPopupSet">
     <menupopup id="qwin-tree-contextmenu">
@@ -255,7 +515,7 @@ TODO:
 
         <vbox id="qwin-left-middle-box" flex="1"
               persist="collapsed height">
-          <caption label="Clipboard:" />
+          <caption label="Clipboard/inteli history:" />
           <tree id="qwin-left-clipboardtree" flex="1" hidecolumnpicker="false"
                 seltype="single"
                 ondblclick="ko.extensions.qwin.onClipboardTreeDblClick();">
@@ -346,7 +606,7 @@ TODO:
 
         <vbox id="qwin-right-middle-box" flex="1"
               persist="collapsed height">
-          <caption label="Clipboard:" />
+          <caption label="Clipboard/inteli history:" />
           <tree id="qwin-right-clipboardtree" flex="1" hidecolumnpicker="false"
                 seltype="single"
                 ondblclick="ko.extensions.qwin.onClipboardTreeDblClick();">

@@ -1302,8 +1302,19 @@ ko.extensions.qwin = {};
   {
     try {
         // TODO: implement some LRU
-        ko.extensions.qwin.clipboardHistory.push(text);
-        this.reloadClipboardTree();
+        var found = false;
+        if (ko.extensions.qwin.clipboardHistory.length) {
+            for (var i in ko.extensions.qwin.clipboardHistory.items) {
+                if (ko.extensions.qwin.clipboardHistory.items[i] == text) {
+                    found = true;
+                }
+            }
+        }
+
+        if (!found) {
+            ko.extensions.qwin.clipboardHistory.push(text);
+            this.reloadClipboardTree();
+        }
     } catch(e) {
       log.exception(e);
     }
@@ -1329,18 +1340,7 @@ ko.extensions.qwin = {};
         }
 
         if (clipTxt) {
-            var found = false;
-            if (ko.extensions.qwin.clipboardHistory.length) {
-                for (var i in ko.extensions.qwin.clipboardHistory.items) {
-                    if (ko.extensions.qwin.clipboardHistory.items[i] == clipTxt) {
-                        found = true;
-                    }
-                }
-            }
-
-            if (!found) {
-                this.addToClipboardHistory(clipTxt);
-            }
+            this.addToClipboardHistory(clipTxt);
         }
 
         var duration = timeSvc.time() - startTime;

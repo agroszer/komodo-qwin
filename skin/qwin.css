@@ -43,6 +43,11 @@
   font-weight:bold!important;
 }
 
+#qwin-left-clipboardtree treechildren::-moz-tree-cell-text(currentView),
+#qwin-right-clipboardtree treechildren::-moz-tree-cell-text(currentView) {
+  font-weight:bold!important;
+}
+
 #qwin-left-tree-col-index,
 #qwin-right-tree-col-index,
 #qwin-left-tree-completion-col-index,

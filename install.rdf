@@ -4,7 +4,7 @@
     <Description about="urn:mozilla:install-manifest">
         <em:id>qwin@ondrejd.com</em:id>
         <em:name>Qwin</em:name>
-        <em:version>0.6.17</em:version>
+        <em:version>0.6.18</em:version>
         <em:description>Simplify switching between opened documents.</em:description>
         <em:creator>Ondrej Donek</em:creator>
         <em:aboutURL>chrome://qwin/content/about.xul</em:aboutURL>

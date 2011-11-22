@@ -68,6 +68,10 @@ qwinFixedSizeStack.prototype = {
         this.maxItems = newSize;
     },
 
+    remove : function(idx) {
+        this.items.splice(idx, 1);
+    },
+
     toString : function() {
         var arr = new Array();
         for (var i = 0; i < this.items.length; i++) {
@@ -77,7 +81,7 @@ qwinFixedSizeStack.prototype = {
     }
 }
 
-  function Hash()
+function Hash()
   {
       this.length = 0;
       this.items = new Array();
@@ -187,6 +191,7 @@ ko.extensions.qwin = {};
   var completionTimer = null;
 
   var clipboardHistory = null;
+  var clipboardHistoryCounter = 0;
   var clipboardTimer = null;
 
 
@@ -378,7 +383,7 @@ ko.extensions.qwin = {};
    * @param aType {string}
    */
   function QwinTreeitemPrototype(aIndex, aLabel, aFullPath, aBaseName,
-                                 aIsDirty, aType)
+                                 aIsDirty, aType, current)
   {
     this.index    = ko.extensions.qwin.indexMaker(aIndex);
     this.label    = aLabel;
@@ -386,6 +391,15 @@ ko.extensions.qwin = {};
     this.baseName = aBaseName;
     this.isDirty  = aIsDirty;
     this.type     = aType;
+    this.current  = current;
+  };
+
+  function QwinClipboardItemPrototype(text, usageCount, addIndex, current)
+  {
+    this.text       = text;
+    this.usageCount = usageCount;
+    this.addIndex   = addIndex;
+    this.current    = current;
   };
 
 
@@ -602,7 +616,7 @@ ko.extensions.qwin = {};
                                               '',
                                               false,
                                               '',
-                                              0));
+                                              false));
             index++;
             if (index > maxItems) break;
         }
@@ -671,13 +685,26 @@ ko.extensions.qwin = {};
       return this.treeitems[aRow].fullPath;
     },
 
+    get currentSelectedItem() {
+        if (this.selection.currentIndex < 0) {
+            return null;
+        }
+        return this.treeitems[this.selection.currentIndex];
+    },
+
     getCellProperties : function(aRow, aCol, aProp)
     {
-      if(ko.extensions.qwin.prefs.highlightCurrent) {
-        var currentView = ko.views.manager.currentView;
+      //log.warn(this.treeitems[aRow]+this.treeitems[aRow].current);
 
-        if(currentView.document.displayPath == this.treeitems[aRow].fullPath)
-          aProp.AppendElement(this.atomSrv.getAtom("currentView"));
+      if(this.treeitems[aRow].current) {
+        aProp.AppendElement(this.atomSrv.getAtom("currentView"));
+      } else {
+        if(ko.extensions.qwin.prefs.highlightCurrent) {
+          var currentView = ko.views.manager.currentView;
+
+          if(currentView.document.displayPath == this.treeitems[aRow].fullPath)
+            aProp.AppendElement(this.atomSrv.getAtom("currentView"));
+        }
       }
 
       if(this.treeitems[aRow].isDirty &&
@@ -834,6 +861,7 @@ ko.extensions.qwin = {};
       //why is this needed???
       ko.extensions.qwin.clipboardHistory = new qwinFixedSizeStack(
                                     ko.extensions.qwin.prefs.clipboardItems);
+      ko.extensions.qwin.clipboardHistoryCounter = 0;
 
       ko.extensions.qwin.clipboardTimer = new ko.objectTimer(
         ko.extensions.qwin, ko.extensions.qwin.onClipboardTimer, []);
@@ -934,9 +962,9 @@ ko.extensions.qwin = {};
       if (index <= 10) {
         return index;
       } else {
-        // 11a
-        // 12b
-        return index + String.fromCharCode(index-11+97);
+        // a11
+        // b12
+        return String.fromCharCode(index-11+97) + index;
       }
     } catch(e) {
       log.exception(e);
@@ -1029,6 +1057,7 @@ ko.extensions.qwin = {};
         : null;
 
     try {
+        //ko.windowManager.getMainWindow();
       var views = ko.views.manager.topView.getDocumentViewList(true);
       var index = 1;
 
@@ -1046,11 +1075,13 @@ ko.extensions.qwin = {};
         var viewtype = view.getAttribute("type");
 
         if(typeof(view.document) == "undefined" || !view.document)
-          continue;
+            continue;
 
         // Check if user want to see Start Page and browsers
-        if(!ko.extensions.qwin.prefs.showWebPages && viewtype == "browser") continue;
-        if(!ko.extensions.qwin.prefs.showStartPage && viewtype == "startpage") continue;
+        if(!ko.extensions.qwin.prefs.showWebPages && viewtype == "browser")
+            continue;
+        if(!ko.extensions.qwin.prefs.showStartPage && viewtype == "startpage")
+            continue;
 
         // Create new treeitem
         var fullpath = "*** Untitled ***"
@@ -1103,7 +1134,7 @@ ko.extensions.qwin = {};
                                                  basename,
                                                  dirty,
                                                  viewtype,
-                                                 level));
+                                                 false));
         index++;
       }
     } catch(e) {
@@ -1242,29 +1273,32 @@ ko.extensions.qwin = {};
     try {
         if (!ko.extensions.qwin.prefs.enableClipboard) return;
 
-        var words  = new Array();
+        var parts  = new Array();
+        var index = 1;
         for (var i in ko.extensions.qwin.clipboardHistory.items) {
-            var word = ko.extensions.qwin.clipboardHistory.items[i];
-            words.push(new QwinTreeitemPrototype(0,
-                                              this.trim(word),
-                                              word,
+            var text = ko.extensions.qwin.clipboardHistory.items[i].text;
+            var current = ko.extensions.qwin.clipboardHistory.items[i].current;
+            parts.push(new QwinTreeitemPrototype(index,
+                                              this.trim(text),
+                                              text,
                                               '',
                                               false,
-                                              '',
-                                              0));
+                                              i, // stash in index
+                                              current));
+            index++;
+        }
 
-        }
-        words.reverse();
-        var index = 1;
-        for (var i in words) {
-            words[i].index = this.indexMaker(index);
-            index ++;
-        }
+        //parts.reverse();
+        //var index = 1;
+        //for (var i in parts) {
+        //    parts[i].index = this.indexMaker(index);
+        //    index ++;
+        //}
 
         var prefix = ko.extensions.qwin.prefs.displayWhere;
         var tree   = document.getElementById("qwin-" + prefix + "-clipboardtree");
 
-        tree.view  = new QwinTreeviewPrototype(words);
+        tree.view  = new QwinTreeviewPrototype(parts);
     } catch(e) {
       log.exception(e);
     }
@@ -1298,21 +1332,98 @@ ko.extensions.qwin = {};
     }
   }; // end onTimer(aPrefix)
 
-  this.addToClipboardHistory = function(text)
+  this.hasClipboardHistory = function(text)
   {
     try {
         // TODO: implement some LRU
+
         var found = false;
         if (ko.extensions.qwin.clipboardHistory.length) {
             for (var i in ko.extensions.qwin.clipboardHistory.items) {
-                if (ko.extensions.qwin.clipboardHistory.items[i] == text) {
+                if (ko.extensions.qwin.clipboardHistory.items[i].text == text) {
                     found = true;
                 }
             }
         }
+        return found;
+    } catch(e) {
+      log.exception(e);
+    }
+  };
 
-        if (!found) {
-            ko.extensions.qwin.clipboardHistory.push(text);
+  this.incrementUsageCount = function(text)
+  {
+    try {
+        // TODO: implement some LRU
+
+        for (var i in ko.extensions.qwin.clipboardHistory.items) {
+            ko.extensions.qwin.clipboardHistory.items[i].current = false;
+        }
+
+        for (var i in ko.extensions.qwin.clipboardHistory.items) {
+            if (ko.extensions.qwin.clipboardHistory.items[i].text == text) {
+                ko.extensions.qwin.clipboardHistory.items[i].usageCount += 1;
+                ko.extensions.qwin.clipboardHistory.items[i].current = true;
+            }
+        }
+
+        ko.extensions.qwin.reloadClipboardTree();
+    } catch(e) {
+      log.exception(e);
+    }
+  };
+
+  this.addToClipboardHistory = function(text)
+  {
+    try {
+        // TODO: implement some LRU
+
+        var found = this.hasClipboardHistory(text);
+
+        if (found) {
+            this.incrementUsageCount(text);
+        } else {
+            var hst = ko.extensions.qwin.clipboardHistory;
+            var leastCount = 99999;
+            for (var i in hst.items) {
+                hst.items[i].current = false;
+                if (hst.items[i].usageCount < leastCount) {
+                    leastCount = hst.items[i].usageCount
+                }
+            }
+
+            ko.extensions.qwin.clipboardHistoryCounter += 1;
+            item = new QwinClipboardItemPrototype(
+                text, 0, ko.extensions.qwin.clipboardHistoryCounter, true);
+
+            if (hst.length < hst.maxItems) {
+                // just push
+                hst.push(item);
+            } else {
+                // find a LRU item to replace
+                var leastIdx = ko.extensions.qwin.clipboardHistoryCounter;
+                for (var i in hst.items) {
+                    if (hst.items[i].usageCount == leastCount) {
+                        if (hst.items[i].addIndex < leastIdx) {
+                            leastIdx = hst.items[i].addIndex;
+                        }
+                    }
+                }
+                if (leastIdx == ko.extensions.qwin.clipboardHistoryCounter) {
+                    //alert("just push");
+                    // huhh, not found, just push
+                    hst.push(item);
+                } else {
+                    // replace
+                    //alert("replace "+leastIdx);
+                    for (var i in hst.items) {
+                        if (hst.items[i].addIndex == leastIdx) {
+                            //alert("replacing "+i);
+                            hst.items[i] = item;
+                        }
+                    }
+                }
+            }
             this.reloadClipboardTree();
         }
     } catch(e) {
@@ -1340,7 +1451,9 @@ ko.extensions.qwin = {};
         }
 
         if (clipTxt) {
-            this.addToClipboardHistory(clipTxt);
+            if (!this.hasClipboardHistory(clipTxt)) {
+                this.addToClipboardHistory(clipTxt);
+            }
         }
 
         var duration = timeSvc.time() - startTime;
@@ -1480,6 +1593,8 @@ ko.extensions.qwin = {};
       sm.replaceSel(newword)
       sm.endUndoAction();
       sm.scrollCaret();
+
+      ko.extensions.qwin.incrementUsageCount(newword);
 
     } catch (e) {
         log.exception(e);
@@ -1637,7 +1752,7 @@ ko.extensions.qwin = {};
         var prefix  = ko.extensions.qwin.prefs.displayWhere;
         var tree    = document.getElementById("qwin-" + prefix + "-tree");
 
-        // do a LAST tab
+        // TODO: do a LAST tab
         tree.currentIndex = index-1;
         ko.extensions.qwin.onTreeDblClick(null);
     } catch (e) {

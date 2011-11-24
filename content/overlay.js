@@ -191,6 +191,7 @@ ko.extensions.qwin = {};
   var completionTimer = null;
 
   var clipboardHistory = null;
+  var lastClipboardHistoryText = '';
   var clipboardHistoryCounter = 0;
   var clipboardTimer = null;
 
@@ -862,6 +863,7 @@ ko.extensions.qwin = {};
       ko.extensions.qwin.clipboardHistory = new qwinFixedSizeStack(
                                     ko.extensions.qwin.prefs.clipboardItems);
       ko.extensions.qwin.clipboardHistoryCounter = 0;
+      ko.extensions.qwin.lastClipboardHistoryText = '';
 
       ko.extensions.qwin.clipboardTimer = new ko.objectTimer(
         ko.extensions.qwin, ko.extensions.qwin.onClipboardTimer, []);
@@ -1451,8 +1453,11 @@ ko.extensions.qwin = {};
         }
 
         if (clipTxt) {
-            if (!this.hasClipboardHistory(clipTxt)) {
-                this.addToClipboardHistory(clipTxt);
+            if (ko.extensions.qwin.lastClipboardHistoryText != clipTxt) {
+                if (!this.hasClipboardHistory(clipTxt)) {
+                    this.addToClipboardHistory(clipTxt);
+                }
+                ko.extensions.qwin.lastClipboardHistoryText = clipTxt;
             }
         }
 

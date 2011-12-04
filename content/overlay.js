@@ -625,7 +625,7 @@ ko.extensions.qwin = {};
         var duration = timeSvc.time() - startTime;
 
         var msg = "getCompletion for "+word+" in "+duration;
-        log.warn(msg);
+        //log.warn(msg);
 
     }
     catch(e)
@@ -1266,7 +1266,7 @@ ko.extensions.qwin = {};
         }
         if ((ko.extensions.qwin.completionsShown != curpos) || force) {
           var words  = ko.extensions.qwin.getCompletion(completionIgnoreCase);
-          log.warn("reloadCompletionTree "+curpos);
+          //log.warn("reloadCompletionTree "+curpos);
 
           var prefix = ko.extensions.qwin.prefs.displayWhere;
           var tree   = document.getElementById("qwin-" + prefix + "-completiontree");

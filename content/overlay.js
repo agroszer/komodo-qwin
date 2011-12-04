@@ -511,7 +511,7 @@ ko.extensions.qwin = {};
       return '';
   }
 
-  this.getCompletion = function() {
+  this.getCompletion = function(completionIgnoreCase) {
     var rv = new Array();
 
     try {
@@ -529,7 +529,7 @@ ko.extensions.qwin = {};
 
         ko.extensions.qwin.completionWord = word;
 
-        if (ko.extensions.qwin.prefs.completionIgnoreCase) {
+        if (completionIgnoreCase) {
           var options = "gim";
         } else {
           var options = "gm";
@@ -1185,7 +1185,8 @@ ko.extensions.qwin = {};
       // Enable/disable Qwin according to user's preferences
       if (ko.extensions.qwin.prefs.enableCompletion) {
         completiontree.disabled = false;
-        ko.extensions.qwin.reloadCompletionTree();
+        ko.extensions.qwin.reloadCompletionTree(
+            null, ko.extensions.qwin.prefs.completionIgnoreCase, false);
       } else {
         // When Qwin is disabled we need to ensure that table is empty
         completiontree.view = new QwinTreeviewPrototype([]);
@@ -1235,13 +1236,21 @@ ko.extensions.qwin = {};
     }
   }; // end reloadTree(aPrefix)
 
+  this.onHotkeyCaseInsensitiveLookUp = function() {
+      try {
+        this.reloadCompletionTree(
+            null, !ko.extensions.qwin.prefs.completionIgnoreCase, true);
+      } catch (e) {
+          log.exception(e);
+      }
+  }
 
-  this.reloadCompletionTree = function(currentPos)
+  this.reloadCompletionTree = function(currentPos, completionIgnoreCase, force)
   {
     try {
         if (!ko.extensions.qwin.prefs.enableCompletion) return;
 
-        if (typeof(currentPos) == "undefined") {
+        if (!currentPos) {
           try {
             var curpos = ko.extensions.qwin.getCurrentCompletionPos();
           } catch(e) {
@@ -1255,8 +1264,9 @@ ko.extensions.qwin = {};
         } else {
           var curpos = currentPos;
         }
-        if (ko.extensions.qwin.completionsShown != curpos) {
-          var words  = ko.extensions.qwin.getCompletion();
+        if ((ko.extensions.qwin.completionsShown != curpos) || force) {
+          var words  = ko.extensions.qwin.getCompletion(completionIgnoreCase);
+          log.warn("reloadCompletionTree "+curpos);
 
           var prefix = ko.extensions.qwin.prefs.displayWhere;
           var tree   = document.getElementById("qwin-" + prefix + "-completiontree");
@@ -1319,13 +1329,15 @@ ko.extensions.qwin = {};
           var curpos = ko.extensions.qwin.getCurrentCompletionPos();
         } catch(e) {
           ko.extensions.qwin.lastCompletionPos = '';
-          ko.extensions.qwin.reloadCompletionTree('');
+          ko.extensions.qwin.reloadCompletionTree(
+                null, ko.extensions.qwin.prefs.completionIgnoreCase, true);
           return;
         }
 
         if (ko.extensions.qwin.lastCompletionPos == curpos) {
           //if position not changed since last fire
-          ko.extensions.qwin.reloadCompletionTree(curpos);
+          ko.extensions.qwin.reloadCompletionTree(
+            curpos, ko.extensions.qwin.prefs.completionIgnoreCase, false);
         }
 
         ko.extensions.qwin.lastCompletionPos = curpos;

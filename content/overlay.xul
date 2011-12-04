@@ -389,6 +389,13 @@ TODO:
       key="key_qwin_goto_tabnumber"
       desc="qwin: goto tab number x"
       oncommand="ko.extensions.qwin.onHotkeyGotoTab();"/>
+
+
+    <broadcaster
+      id="cmd_qwin_invers_case_intelli"
+      key="key_qwin_invers_case_intelli"
+      desc="qwin: force case invers intelli lookup"
+      oncommand="ko.extensions.qwin.onHotkeyCaseInsensitiveLookUp();"/>
   </broadcasterset>
 
   <popupset id="editorTooltipSet">

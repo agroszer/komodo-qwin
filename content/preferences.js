@@ -15,10 +15,6 @@ ko.extensions.qwin.prefsDlg = {};
    */
   const PREFSPANE_ELMS_ID = [
                              "qwin-enable-completion-checkbox",
-                             "qwin-prefwindow-modifier-menulist",
-                             "qwin-prefwindow-keyset-menulist",
-                             "qwin-prefwindow-Completionmodifier-menulist",
-                             "qwin-prefwindow-Completionkeyset-menulist",
                              "qwin-prefwindow-position-menulist",
                              "qwin-prefwindow-display-menulist",
                              "qwin-show_views_groups-check",

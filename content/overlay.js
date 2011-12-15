@@ -137,20 +137,6 @@ ko.extensions.qwin = {};
  * Qwin JavaScript implementation
  */
 (function() {
-  // Constants defining modifiers
-  const QWIN_MODIFIER_NONE           = "none";
-  const QWIN_MODIFIER_ALT            = "alt";
-  const QWIN_MODIFIER_CTRL           = "ctrl";
-  const QWIN_MODIFIER_SHIFT          = "shift";
-  const QWIN_MODIFIER_ALT_CTRL       = "ctrl+alt";
-  const QWIN_MODIFIER_ALT_SHIFT      = "alt+shift";
-  const QWIN_MODIFIER_CTRL_SHIFT     = "ctrl+shift";
-  const QWIN_MODIFIER_CTRL_ALT_SHIFT = "ctrl+alt+shift";
-
-  // Constants defining keysets
-  const QWIN_KEYSET_NUMBERS          = "numbers";
-  const QWIN_KEYSET_FKEYS            = "fkeys";
-
   // Constants defining where to open Qwin sidebar
   const QWIN_WHERE_LEFT              = "left";
   const QWIN_WHERE_RIGHT             = "right";
@@ -216,18 +202,6 @@ ko.extensions.qwin = {};
 
     get enableClipboard() { return prefSrv.getBoolPref("enableClipboard"); },
     set enableClipboard(val) { prefSrv.setBoolPref("enableClipboard", val); },
-
-    get usedModifier() { return prefSrv.getCharPref("usedModifier"); },
-    set usedModifier(val) { prefSrv.setCharPref("usedModifier", val); },
-
-    get usedCompletionModifier() { return prefSrv.getCharPref("usedCompletionModifier"); },
-    set usedCompletionModifier(val) { prefSrv.setCharPref("usedCompletionModifier", val); },
-
-    get usedKeyset() { return prefSrv.getCharPref("usedKeyset"); },
-    set usedKeyset(val) { prefSrv.setCharPref("usedKeyset", val); },
-
-    get usedCompletionKeyset() { return prefSrv.getCharPref("usedCompletionKeyset"); },
-    set usedCompletionKeyset(val) { prefSrv.setCharPref("usedCompletionKeyset", val); },
 
     get displayWhere() { return prefSrv.getCharPref("displayWhere"); },
     set displayWhere(val) { prefSrv.setCharPref("displayWhere", val); },
@@ -297,18 +271,6 @@ ko.extensions.qwin = {};
 
         if(!prefSrv.prefHasUserValue("enableClipboard"))
           prefSrv.setBoolPref("enableClipboard", true);
-
-        if(!prefSrv.prefHasUserValue("usedModifier"))
-          prefSrv.setCharPref("usedModifier", QWIN_MODIFIER_ALT_CTRL);
-
-        if(!prefSrv.prefHasUserValue("usedKeyset"))
-          prefSrv.setCharPref("usedKeyset", QWIN_KEYSET_FKEYS);
-
-        if(!prefSrv.prefHasUserValue("usedCompletionModifier"))
-          prefSrv.setCharPref("usedCompletionModifier", QWIN_MODIFIER_CTRL_ALT_SHIFT);
-
-        if(!prefSrv.prefHasUserValue("usedCompletionKeyset"))
-          prefSrv.setCharPref("usedCompletionKeyset", QWIN_KEYSET_FKEYS);
 
         if(!prefSrv.prefHasUserValue("displayWhere"))
           prefSrv.setCharPref("displayWhere", QWIN_WHERE_LEFT);
@@ -851,11 +813,6 @@ ko.extensions.qwin = {};
       prefSrv.QueryInterface(Components.interfaces.nsIPrefBranch2);
       prefSrv.addObserver("", this, false);
 
-      // Add event listener for capturing keypresses
-      // Note: We should definitively use native Komodo's keybindings
-      //       and not (Mozilla-like) event listener on events.
-      addEventListener("keypress", ko.extensions.qwin.onKeypress, false);
-
       ko.extensions.qwin.completionTimer = new ko.objectTimer(
         ko.extensions.qwin, ko.extensions.qwin.onTimer, []);
       ko.extensions.qwin.completionTimer.startInterval(
@@ -900,8 +857,6 @@ ko.extensions.qwin = {};
         ko.extensions.qwin.clipboardTimer.free();
         ko.extensions.qwin.clipboardTimer = null;
       }
-
-      removeEventListener("keypress", ko.extensions.qwin.onKeypress, false);
 
       observerSvc.removeObserver(this, "open_file");
       observerSvc.removeObserver(this, "open-url");
@@ -1353,27 +1308,22 @@ ko.extensions.qwin = {};
   this.hasClipboardHistory = function(text)
   {
     try {
-        // TODO: implement some LRU
-
-        var found = false;
         if (ko.extensions.qwin.clipboardHistory.length) {
             for (var i in ko.extensions.qwin.clipboardHistory.items) {
                 if (ko.extensions.qwin.clipboardHistory.items[i].text == text) {
-                    found = true;
+                    return true;
                 }
             }
         }
-        return found;
     } catch(e) {
       log.exception(e);
     }
+    return false;
   };
 
   this.incrementUsageCount = function(text)
   {
     try {
-        // TODO: implement some LRU
-
         for (var i in ko.extensions.qwin.clipboardHistory.items) {
             ko.extensions.qwin.clipboardHistory.items[i].current = false;
         }
@@ -1394,8 +1344,6 @@ ko.extensions.qwin = {};
   this.addToClipboardHistory = function(text)
   {
     try {
-        // TODO: implement some LRU
-
         var found = this.hasClipboardHistory(text);
 
         if (found) {
@@ -1626,82 +1574,6 @@ ko.extensions.qwin = {};
     }
   }
 
-
-  this.getListItem = function(aEvent, tree, req_modifier, req_keyset)
-  {
-    try {
-  	  var views_count  = tree.view.rowCount;
-      var req_item     = -1;
-
-      var needShift = false;
-      var needAlt = false;
-      var needCtrl = false;
-
-      switch (req_modifier)
-      {
-        case QWIN_MODIFIER_ALT:
-          needAlt=true;
-          break;
-        case QWIN_MODIFIER_CTRL:
-          needCtrl=true;
-          break;
-        case QWIN_MODIFIER_SHIFT:
-          needShift=true;
-          break;
-        case QWIN_MODIFIER_ALT_CTRL:
-          needAlt=true;
-          needCtrl=true;
-          break;
-        case QWIN_MODIFIER_ALT_SHIFT:
-          needAlt=true;
-          needShift=true;
-          break;
-        case QWIN_MODIFIER_CTRL_SHIFT:
-          needCtrl=true;
-          needShift=true;
-          break;
-        case QWIN_MODIFIER_CTRL_ALT_SHIFT:
-          needAlt=true;
-          needCtrl=true;
-          needShift=true;
-          break;
-      }
-
-      if ((needAlt == aEvent.altKey)
-          && (needShift == aEvent.shiftKey)
-          && (needCtrl == aEvent.ctrlKey)) {
-        if(req_keyset == QWIN_KEYSET_NUMBERS) {
-          if(aEvent.charCode >= 48 && aEvent.charCode <= 57 ||
-             aEvent.charCode == 45 || aEvent.charCode == 61 ||
-             aEvent.charCode == 96) {
-            switch(aEvent.charCode) {
-              case 48: req_item =  9; break; // "0"
-              case 45: req_item = 10; break; // "-"
-              case 61: req_item = 11; break; // "="
-              case 96: req_item = 99; break; // "`"
-              default:
-                if(views_count < (aEvent.charCode - 49)) return;
-                req_item = aEvent.charCode - 49;
-                break;
-            }
-          }
-        } else if(req_keyset == QWIN_KEYSET_FKEYS) {
-          if(aEvent.keyCode >= 112 && aEvent.keyCode <= 123) {
-            if(views_count < (aEvent.keyCode - 112)) return;
-            req_item = aEvent.keyCode - 112;
-          }
-        }
-
-      }
-
-      return req_item;
-
-  	} catch(e) {
-  	  log.exception(e);
-  	}
-    return -1;
-  };
-
   this.getCurrentCompletionPos = function(aEvent)
   {
     var cv = ko.views.manager.currentView;
@@ -1714,63 +1586,33 @@ ko.extensions.qwin = {};
     return pos;
   }
 
+  this.onHotkeyInsertCurrentHistoryItem = function(index) {
+    try {
+        var hst = ko.extensions.qwin.clipboardHistory;
+        var current = null;
+        for (var i in hst.items) {
+            if (hst.items[i].current) {
+                current = hst.items[i].text;
+            }
+        }
 
-  /**
-   * Fired when user press some key
-   *
-   * @param aEvent {Components.interfaces.nsIDOMKeyEvent}
-   */
-  this.onKeypress = function(aEvent)
-  {
-  	try {
-      var prefix       = ko.extensions.qwin.prefs.displayWhere;
-      var tree         = document.getElementById("qwin-" + prefix + "-tree");
-
-      var req_item = ko.extensions.qwin.getListItem(aEvent, tree,
-                      ko.extensions.qwin.prefs.usedModifier,
-                      ko.extensions.qwin.prefs.usedKeyset)
-
-      if(req_item != -1) {
-        // Switch the view if requested view was found
-        tree.currentIndex = req_item;
-        ko.extensions.qwin.onTreeDblClick(null);
-        aEvent.stopPropagation();
-        return;
-      }
-
-      var tree         = document.getElementById("qwin-" + prefix + "-completiontree");
-
-      var req_item = ko.extensions.qwin.getListItem(aEvent, tree,
-                      ko.extensions.qwin.prefs.usedCompletionModifier,
-                      ko.extensions.qwin.prefs.usedCompletionKeyset)
-
-
-      if(req_item != -1) {
-        // insert the text
-        if (req_item == 99 && ko.extensions.qwin.lastInsertedWord) {
+        if (current) {
             var sm = ko.views.manager.currentView.scimoz;
 
             sm.beginUndoAction();
 
             //sm.insertText(sm.currentPos, ko.extensions.qwin.lastInsertedWord)
             //sm.currentPos = sm.currentPos+ko.extensions.qwin.lastInsertedWord.length
-            sm.replaceSel(ko.extensions.qwin.lastInsertedWord)
+            sm.replaceSel(current)
 
             sm.endUndoAction();
 
             sm.scrollCaret();
-        } else {
-            tree.currentIndex = req_item;
-            ko.extensions.qwin.onCompletionTreeDblClick(null);
         }
-        aEvent.stopPropagation();
-        return;
-      }
-
-  	} catch(e) {
-  	  log.exception(e);
-  	}
-  }; // end onKeypress(aEvent)
+    } catch (e) {
+        log.exception(e);
+    }
+  }; // end onHotkeyInsertCurrentHistoryItem
 
   this.onHotkeySwitchTab = function(index) {
     try {

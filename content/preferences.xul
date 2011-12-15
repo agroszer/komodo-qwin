@@ -66,14 +66,6 @@
                       name="extensions.qwin.enableCompletion"/>
           <preference id="pref.enableClipboard" type="bool"
                       name="extensions.qwin.enableClipboard"/>
-          <preference id="pref.usedModifier" type="wstring"
-                      name="extensions.qwin.usedModifier"/>
-          <preference id="pref.usedKeyset" type="wstring"
-                      name="extensions.qwin.usedKeyset"/>
-          <preference id="pref.usedCompletionModifier" type="wstring"
-                      name="extensions.qwin.usedCompletionModifier"/>
-          <preference id="pref.usedCompletionKeyset" type="wstring"
-                      name="extensions.qwin.usedCompletionKeyset"/>
           <preference id="pref.displayWhere" type="wstring"
                       name="extensions.qwin.displayWhere"/>
           <preference id="pref.pathsDisplay" type="wstring"
@@ -133,39 +125,6 @@
             <grid>
               <columns><column/><column flex="1"/></columns>
               <rows>
-                <row align="center">
-                  <label value="&usedModifierPref.label;"
-                         accesskey="&usedModifierPref.key;"
-                         control="qwin-prefwindow-modifier-menulist"/>
-                  <menulist id="qwin-prefwindow-modifier-menulist" flex="1"
-                            preference="pref.usedModifier"
-                            disabled="true">
-                    <menupopup>
-                      <menuitem label="&usedModifierVal1.label;" value="none"/>
-                      <menuitem label="alt" value="alt"/>
-                      <menuitem label="ctrl" value="ctrl"/>
-                      <menuitem label="shift" value="shift"/>
-                      <menuitem label="alt+shift" value="alt+shift"/>
-                      <menuitem label="ctrl+shift" value="ctrl+shift"/>
-                      <menuitem label="ctrl+alt" value="ctrl+alt"/>
-                      <menuitem label="ctrl+alt+shift" value="ctrl+alt+shift"/>
-                    </menupopup>
-                  </menulist>
-                </row>
-                <row align="center">
-                  <label value="&usedKeysetPref.label;"
-                         accesskey="&usedKeysetPref.key;"
-                         control="qwin-prefwindow-keyset-menulist"/>
-                  <menulist id="qwin-prefwindow-keyset-menulist" flex="1"
-                            preference="pref.usedKeyset"
-                            disabled="true">
-                    <menupopup>
-                      <menuitem  label="&usedKeysetVal1.label;" value="numbers"/>
-                      <menuitem  label="&usedKeysetVal2.label;" value="fkeys"/>
-                    </menupopup>
-                  </menulist>
-                </row>
-
                 <row align="center">
                   <label value="&displayWherePref.label;"
                          accesskey="&displayWherePref.key;"
@@ -297,41 +256,6 @@
             <grid>
               <columns><column/><column flex="1"/></columns>
               <rows>
-
-                <row align="center">
-                  <label value="&usedModifierPref.label;"
-                         accesskey="&usedModifierPref.key;"
-                         control="qwin-prefwindow-Completionmodifier-menulist"/>
-                  <menulist id="qwin-prefwindow-Completionmodifier-menulist"
-                            flex="1"
-                            preference="pref.usedCompletionModifier"
-                            disabled="true">
-                    <menupopup>
-                      <menuitem label="&usedModifierVal1.label;" value="none"/>
-                      <menuitem label="alt" value="alt"/>
-                      <menuitem label="ctrl" value="ctrl"/>
-                      <menuitem label="shift" value="shift"/>
-                      <menuitem label="alt+shift" value="alt+shift"/>
-                      <menuitem label="ctrl+shift" value="ctrl+shift"/>
-                      <menuitem label="ctrl+alt" value="ctrl+alt"/>
-                      <menuitem label="ctrl+alt+shift" value="ctrl+alt+shift"/>
-                    </menupopup>
-                  </menulist>
-                </row>
-                <row align="center">
-                  <label value="&usedKeysetPref.label;"
-                         accesskey="&usedKeysetPref.key;"
-                         control="qwin-prefwindow-Completionkeyset-menulist"/>
-                  <menulist id="qwin-prefwindow-Completionkeyset-menulist" flex="1"
-                            preference="pref.usedCompletionKeyset"
-                            disabled="true">
-                    <menupopup>
-                      <menuitem  label="&usedKeysetVal1.label;" value="numbers"/>
-                      <menuitem  label="&usedKeysetVal2.label;" value="fkeys"/>
-                    </menupopup>
-                  </menulist>
-                </row>
-
                 <row align="center">
                   <spacer flex="1"/>
                   <hbox align="center">
@@ -394,7 +318,7 @@
                       label="&enableClipboard.label;"
                       preference="pref.enableClipboard"
                       disabled="true"/>
-
+            
             <row align="center">
               <hbox align="center">
                 <label value="&clipboardItems.label;"
@@ -407,6 +331,8 @@
             </row>
 
           </groupbox>
+
+          <label value="Note: use Edit/Preferences/Editor/Key bindings to assign hotkeys" />
 
         </vbox>
       </vbox>

@@ -396,6 +396,14 @@ TODO:
       key="key_qwin_invers_case_intelli"
       desc="qwin: force case invers intelli lookup"
       oncommand="ko.extensions.qwin.onHotkeyCaseInsensitiveLookUp();"/>
+
+
+    <broadcaster
+      id="cmd_qwin_insert_current_item"
+      key="key_qwin_insert_current_item"
+      desc="qwin: insert current history item"
+      oncommand="ko.extensions.qwin.onHotkeyInsertCurrentHistoryItem();"/>
+
   </broadcasterset>
 
   <popupset id="editorTooltipSet">

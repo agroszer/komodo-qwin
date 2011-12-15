@@ -195,6 +195,8 @@ ko.extensions.qwin = {};
   var clipboardHistoryCounter = 0;
   var clipboardTimer = null;
 
+  const QWIN_CLIPBOARD_HISTORY_LRU = false;
+
 
   // ========================================================================
   // Preferences
@@ -1300,12 +1302,14 @@ ko.extensions.qwin = {};
             index++;
         }
 
-        //parts.reverse();
-        //var index = 1;
-        //for (var i in parts) {
-        //    parts[i].index = this.indexMaker(index);
-        //    index ++;
-        //}
+        if (!QWIN_CLIPBOARD_HISTORY_LRU) {
+            parts.reverse();
+            var index = 1;
+            for (var i in parts) {
+                parts[i].index = this.indexMaker(index);
+                index ++;
+            }
+        }
 
         var prefix = ko.extensions.qwin.prefs.displayWhere;
         var tree   = document.getElementById("qwin-" + prefix + "-clipboardtree");
@@ -1410,33 +1414,37 @@ ko.extensions.qwin = {};
             item = new QwinClipboardItemPrototype(
                 text, 0, ko.extensions.qwin.clipboardHistoryCounter, true);
 
-            if (hst.length < hst.maxItems) {
-                // just push
-                hst.push(item);
-            } else {
-                // find a LRU item to replace
-                var leastIdx = ko.extensions.qwin.clipboardHistoryCounter;
-                for (var i in hst.items) {
-                    if (hst.items[i].usageCount == leastCount) {
-                        if (hst.items[i].addIndex < leastIdx) {
-                            leastIdx = hst.items[i].addIndex;
-                        }
-                    }
-                }
-                if (leastIdx == ko.extensions.qwin.clipboardHistoryCounter) {
-                    //alert("just push");
-                    // huhh, not found, just push
+            if (QWIN_CLIPBOARD_HISTORY_LRU) {
+                if (hst.length < hst.maxItems) {
+                    // just push
                     hst.push(item);
                 } else {
-                    // replace
-                    //alert("replace "+leastIdx);
+                    // find a LRU item to replace
+                    var leastIdx = ko.extensions.qwin.clipboardHistoryCounter;
                     for (var i in hst.items) {
-                        if (hst.items[i].addIndex == leastIdx) {
-                            //alert("replacing "+i);
-                            hst.items[i] = item;
+                        if (hst.items[i].usageCount == leastCount) {
+                            if (hst.items[i].addIndex < leastIdx) {
+                                leastIdx = hst.items[i].addIndex;
+                            }
+                        }
+                    }
+                    if (leastIdx == ko.extensions.qwin.clipboardHistoryCounter) {
+                        //alert("just push");
+                        // huhh, not found, just push
+                        hst.push(item);
+                    } else {
+                        // replace
+                        //alert("replace "+leastIdx);
+                        for (var i in hst.items) {
+                            if (hst.items[i].addIndex == leastIdx) {
+                                //alert("replacing "+i);
+                                hst.items[i] = item;
+                            }
                         }
                     }
                 }
+            } else {
+                hst.push(item);
             }
             this.reloadClipboardTree();
         }

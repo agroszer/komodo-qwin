@@ -35,6 +35,10 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+// taken from http://xregexp.com/xregexp.js
+RegExp.escape = function(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
 function qwinFixedSizeStack(maxItems) {
     this.items = new Array();
     this.maxItems = maxItems ? maxItems : 100;
@@ -182,6 +186,7 @@ ko.extensions.qwin = {};
   var clipboardTimer = null;
 
   const QWIN_CLIPBOARD_HISTORY_LRU = false;
+  const QWIN_SEPARATORS = ' ./:';
 
 
   // ========================================================================
@@ -454,6 +459,33 @@ ko.extensions.qwin = {};
         return views;
     }
 
+  //this.getWord = function() {
+  //    try {
+  //        var sm = ko.views.manager.currentView.scimoz;
+  //        var curinsert = sm.currentPos;
+  //        var lineno = sm.lineFromPosition(curinsert);
+  //        var startofLinePos = sm.positionFromLine(lineno);
+  //        var line = sm.getTextRange(startofLinePos, curinsert);
+  //        var lastChar = line.charAt(line.length - 1);
+  //        var append = '';
+  //        if (QWIN_SEPARATORS.indexOf(lastChar) > -1) {
+  //          append = lastChar;
+  //          line = line.substr(0, line.length - 1);
+  //        };
+  //
+  //        var myregexp = new RegExp("(\\w*)$", "gm");
+  //        var words = line.match(myregexp);
+  //        if (words) {
+  //          return words[0] + append;
+  //        } else {
+  //          return '';
+  //        }
+  //    } catch (e) {
+  //        log.exception(e);
+  //    }
+  //    return '';
+  //}
+
   this.getWord = function() {
       try {
           var sm = ko.views.manager.currentView.scimoz;
@@ -462,13 +494,22 @@ ko.extensions.qwin = {};
           var startofLinePos = sm.positionFromLine(lineno);
           var line = sm.getTextRange(startofLinePos, curinsert);
 
-          var myregexp = new RegExp("(\\w*)$", "gm");
+          var ml = ko.extensions.qwin.prefs.completionMinWordLength;
+          if (QWIN_SEPARATORS) {
+            var myregexp = new RegExp("(\\w+["+QWIN_SEPARATORS+"]?\\w{0,"+(ml-1)+"})$", "gm");
+            var words = line.match(myregexp);
+            if (words) {
+              return words[0];
+            };
+          };
+
+          var myregexp = new RegExp("(\\w{"+ml+",})$", "gm");
           var words = line.match(myregexp);
           if (words) {
             return words[0];
           } else {
             return '';
-          }
+          };
       } catch (e) {
           log.exception(e);
       }
@@ -485,6 +526,7 @@ ko.extensions.qwin = {};
         var startTime = timeSvc.time();
 
         var word = ko.extensions.qwin.getWord();
+        var fullword = ko.interpolate.getWordUnderCursor();
 
         if (word.length < ko.extensions.qwin.prefs.completionMinWordLength) {
             ko.extensions.qwin.completionWord = '';
@@ -499,6 +541,7 @@ ko.extensions.qwin = {};
           var options = "gm";
         }
 
+        word = RegExp.escape(word);
         var myregexp = new RegExp("\\b" + word + "\\w+\\b", options);
 
         var sm = ko.views.manager.currentView.scimoz;
@@ -506,6 +549,13 @@ ko.extensions.qwin = {};
 
         words = new Hash();
 
+        function addWord(w) {
+            if ((w != "") && (!words.hasItem(w)) && w != fullword) {
+                words.setItem(w,1);
+            }
+        }
+
+        // maybe use myregexp.exec
         if (sm.textLength < QWIN_FILESIZELIMIT) {
             var wbefore = sm.getTextRange(0, sm.currentPos).match(myregexp);
 
@@ -513,10 +563,7 @@ ko.extensions.qwin = {};
                 for (i=wbefore.length-1;
                      (i>=0 && words.items.length < maxItems);
                      i--) {
-                    w = wbefore[i];
-                    if ((w != "") && (!words.hasItem(w))) {
-                        words.setItem(w,1);
-                    }
+                    addWord(wbefore[i]);
                 };
             };
 
@@ -527,10 +574,7 @@ ko.extensions.qwin = {};
                     for (i=0;
                          (i<wafter.length && words.items.length < maxItems);
                          i++) {
-                        w = wafter[i];
-                        if ((w != "") && (!words.hasItem(w))) {
-                            words.setItem(w,1);
-                        }
+                        addWord(wafter[i]);
                     }
                 };
             };
@@ -563,10 +607,7 @@ ko.extensions.qwin = {};
                         for (i=0;
                             (i<viewMatches.length && words.items.length < maxItems);
                             i++) {
-                            w = viewMatches[i];
-                            if ((w != "") && (!words.hasItem(w))) {
-                                words.setItem(w,1);
-                            }
+                            addWord(viewMatches[i]);
                         };
                     };
                 }

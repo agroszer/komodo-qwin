@@ -37,14 +37,7 @@
 
 <!ENTITY enableQwinPref.label      "Enable Qwin">
 <!ENTITY enableQwinPref.key        "E">
-<!ENTITY usedModifierPref.label    "Modifier:">
-<!ENTITY usedModifierPref.key      "M">
-<!ENTITY usedModifierVal1.label    "none">
-<!ENTITY usedKeysetPref.label      "Keyset:">
-<!ENTITY usedKeysetPref.key        "K">
-<!ENTITY usedKeysetVal1.label      "Plain numbers, 1..0 (0 as 10)">
-<!ENTITY usedKeysetVal2.label      "F-number keys, F1..F12">
-<!ENTITY displayWherePref.label    "Position:">
+<!ENTITY displayWherePref.label    "Position: (KO6 only)">
 <!ENTITY displayWherePref.key      "P">
 <!ENTITY displayWhereVal1.label    "Left sidebar">
 <!ENTITY displayWhereVal2.label    "Right sidebar">
@@ -64,7 +57,7 @@
 <!ENTITY show_icons.tip            "Show icons of document type?">
 <!ENTITY highlight_unsaved.label   "Highlight unsaved documents">
 <!ENTITY highlight_unsaved.key     "u">
-<!ENTITY highlight_unsaved.type1   "With asterix">
+<!ENTITY highlight_unsaved.type1   "With asterisk">
 <!ENTITY highlight_unsaved.type2   "With italic">
 <!ENTITY highlight_unsaved.type3   "With underline">
 <!ENTITY highlight_unsaved.type4   "With color">

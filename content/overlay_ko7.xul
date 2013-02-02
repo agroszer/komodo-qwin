@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/global/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/scrolltabs.css" type="text/css"?>
+<?xml-stylesheet href="chrome://qwin/skin/qwin.css" type="text/css"?>
+
+<!DOCTYPE overlay [
+  <!ENTITY % overlayDTD SYSTEM "chrome://qwin/locale/qwin.dtd">
+  %overlayDTD;
+]>
+
+<overlay id="qwinOverlay-ko7"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <ko-pane id="workspace_left_area">
+    <browser type="ko-widget" id="qwinViewbox" label="&qwinTab.label;"
+             position="10" insertbefore="codebrowserviewbox"
+             tab_oncommand="ko.extensions.qwin.update();"
+             tab_onfocus="ko.extensions.qwin.update();"
+	         src="chrome://qwin/content/panel.xul"/>
+  </ko-pane>
+
+</overlay>

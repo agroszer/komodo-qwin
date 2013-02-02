@@ -85,7 +85,7 @@ qwinFixedSizeStack.prototype = {
     }
 }
 
-function Hash()
+function qwinHash()
   {
       this.length = 0;
       this.items = new Array();
@@ -187,6 +187,8 @@ ko.extensions.qwin = {};
 
   const QWIN_CLIPBOARD_HISTORY_LRU = false;
   const QWIN_SEPARATORS = ' ./:';
+
+  var version = 6;
 
 
   // ========================================================================
@@ -547,7 +549,7 @@ ko.extensions.qwin = {};
         var sm = ko.views.manager.currentView.scimoz;
         var maxItems = ko.extensions.qwin.prefs.completionItems;
 
-        words = new Hash();
+        words = new qwinHash();
 
         function addWord(w) {
             if ((w != "") && (!words.hasItem(w)) && w != fullword) {
@@ -708,7 +710,7 @@ ko.extensions.qwin = {};
         if(ko.extensions.qwin.prefs.highlightCurrent) {
           var currentView = ko.views.manager.currentView;
 
-          if(currentView.document.displayPath == this.treeitems[aRow].fullPath)
+          if(currentView.koDoc.displayPath == this.treeitems[aRow].fullPath)
             aProp.AppendElement(this.atomSrv.getAtom("currentView"));
         }
       }
@@ -827,11 +829,12 @@ ko.extensions.qwin = {};
   /**
    * Fired when Qwin is loading
    *
-   * @todo Change way how we capturing keypress events!!!
    */
   this.onLoad = function()
   {
     try {
+      ko.extensions.qwin.determineKomodoVersion();
+
       // We have default values for all values so user doesn't
       // need to go to the Preferences dialog and set up them firstly.
       ko.extensions.qwin.prefs.checkPrefs();
@@ -856,6 +859,7 @@ ko.extensions.qwin = {};
 
       ko.extensions.qwin.completionTimer = new ko.objectTimer(
         ko.extensions.qwin, ko.extensions.qwin.onTimer, []);
+      // XXX
       ko.extensions.qwin.completionTimer.startInterval(
                                     ko.extensions.qwin.prefs.completionSpeed);
 
@@ -867,6 +871,7 @@ ko.extensions.qwin = {};
 
       ko.extensions.qwin.clipboardTimer = new ko.objectTimer(
         ko.extensions.qwin, ko.extensions.qwin.onClipboardTimer, []);
+      // XXX
       ko.extensions.qwin.clipboardTimer.startInterval(250);
 
       // Add numbers to tabs
@@ -944,6 +949,84 @@ ko.extensions.qwin = {};
       log.exception(e);
     }
   }; // end observe()
+
+  this.determineKomodoVersion = function()
+  {
+    try {
+      var vb=document.getElementById("qwinViewbox");
+      if (!vb) {
+        ko.extensions.qwin.version = 6;
+      } else {
+        ko.extensions.qwin.version = 7;
+      };
+    } catch(e) {
+      log.exception(e);
+    }
+  };
+
+
+  ko.extensions.qwin.getElement_6 = function(name)
+  {
+    var tree=null;
+    try {
+      var prefix = ko.extensions.qwin.prefs.displayWhere;
+      tree       = document.getElementById("qwin-" + prefix + "-" + name);
+    } catch(e) {
+      log.exception(e);
+    }
+    return tree;
+  };
+
+  ko.extensions.qwin.getElement_7 = function(name)
+  {
+    var tree=null;
+    try {
+      // cache later
+      tree       = document.getElementById("qwinViewbox").contentDocument.getElementById("qwin-left-"+name);
+    } catch(e) {
+      log.exception(e);
+    }
+    return tree;
+  };
+
+  //ko.extensions.qwin.getElement = function(name)
+  //{
+  //  try {
+  //    if (ko.extensions.qwin.version == 6) {
+  //      return ko.extensions.qwin.getElement_6()
+  //    } else {
+  //      return ko.extensions.qwin.getElement_7()
+  //    }
+  //  } catch(e) {
+  //    log.exception(e);
+  //  }
+  //};
+
+  ko.extensions.qwin.getElement = function(name)
+  {
+    var tree=null;
+    try {
+      //log.error('version:'+ko.extensions.qwin.version);
+
+      if (ko.extensions.qwin.version == 6) {
+        return ko.extensions.qwin.getElement_6(name)
+      } else {
+        return ko.extensions.qwin.getElement_7(name)
+      }
+
+      // cache later
+      var vb=document.getElementById("qwinViewbox");
+      if (!vb) {
+        var prefix = ko.extensions.qwin.prefs.displayWhere;
+        tree       = document.getElementById("qwin-" + prefix + "-" + name);
+      } else {
+        tree=vb.contentDocument.getElementById("qwin-left-"+name);
+      };
+    } catch(e) {
+      log.exception(e);
+    }
+    return tree;
+  };
 
   this.updateEvent = function()
   {
@@ -1074,7 +1157,7 @@ ko.extensions.qwin = {};
 
         var viewtype = view.getAttribute("type");
 
-        if(typeof(view.document) == "undefined" || !view.document)
+        if(typeof(view.koDoc) == "undefined" || !view.koDoc)
             continue;
 
         // Check if user want to see Start Page and browsers
@@ -1090,11 +1173,11 @@ ko.extensions.qwin = {};
         var dirty    = true;
         var level    = 0;
 
-        if(!view.document.isUntitled) {
-          fullpath = view.document.displayPath;
-          basename = view.document.baseName;
+        if(!view.koDoc.isUntitled) {
+          fullpath = view.koDoc.displayPath;
+          basename = view.koDoc.baseName;
           label    = "";
-          dirty    = view.document.isDirty;
+          dirty    = view.koDoc.isDirty;
           level    = 0;
 
           if(viewtype == "startpage") {
@@ -1135,6 +1218,7 @@ ko.extensions.qwin = {};
                                                  dirty,
                                                  viewtype,
                                                  false));
+
         index++;
       }
     } catch(e) {
@@ -1151,21 +1235,25 @@ ko.extensions.qwin = {};
   this.update = function()
   {
     try {
-      var prefix    = ko.extensions.qwin.prefs.displayWhere;
-      var tree      = document.getElementById("qwin-" + prefix + "-tree");
-      var left_tab  = document.getElementById("qwin_left_tab");
-      var right_tab = document.getElementById("qwin_right_tab");
+      //var prefix    = ko.extensions.qwin.prefs.displayWhere;
+      var tree      = ko.extensions.qwin.getElement("tree");
+      //var tree      = document.getElementById("qwin-" + prefix + "-tree");
 
-      if(ko.extensions.qwin.prefs.displayWhere == "left") {
-        if(left_tab.hasAttribute("collapsed"))
-          left_tab.removeAttribute("collapsed");
+      if (ko.extensions.qwin.version == 6) {
+        var left_tab  = document.getElementById("qwin_left_tab");
+        var right_tab = document.getElementById("qwin_right_tab");
 
-        right_tab.setAttribute("collapsed", true);
-      } else {
-        if(right_tab.hasAttribute("collapsed"))
-          right_tab.removeAttribute("collapsed");
+        if(ko.extensions.qwin.prefs.displayWhere == "left") {
+          if(left_tab.hasAttribute("collapsed"))
+            left_tab.removeAttribute("collapsed");
 
-        left_tab.setAttribute("collapsed", true);
+          right_tab.setAttribute("collapsed", true);
+        } else {
+          if(right_tab.hasAttribute("collapsed"))
+            right_tab.removeAttribute("collapsed");
+
+          left_tab.setAttribute("collapsed", true);
+        }
       }
 
       // Enable/disable Qwin according to user's preferences
@@ -1178,7 +1266,8 @@ ko.extensions.qwin = {};
         tree.disabled = true;
       }
 
-      var completiontree = document.getElementById("qwin-" + prefix + "-completiontree");
+      //var completiontree = document.getElementById("qwin-" + prefix + "-completiontree");
+      var completiontree = ko.extensions.qwin.getElement("completiontree")
 
       // Enable/disable Qwin according to user's preferences
       if (ko.extensions.qwin.prefs.enableCompletion) {
@@ -1199,9 +1288,9 @@ ko.extensions.qwin = {};
   this.updateClipboard = function()
   {
     try {
-      var prefix    = ko.extensions.qwin.prefs.displayWhere;
-
-      var clipboardtree = document.getElementById("qwin-" + prefix + "-clipboardtree");
+      //var prefix    = ko.extensions.qwin.prefs.displayWhere;
+      //var clipboardtree = document.getElementById("qwin-" + prefix + "-clipboardtree");
+      var clipboardtree = ko.extensions.qwin.getElement("clipboardtree")
 
       // Enable/disable Qwin according to user's preferences
       if (ko.extensions.qwin.prefs.enableClipboard) {
@@ -1224,8 +1313,9 @@ ko.extensions.qwin = {};
   this.reloadTree = function()
   {
     try {
-        var prefix = ko.extensions.qwin.prefs.displayWhere;
-        var tree   = document.getElementById("qwin-" + prefix + "-tree");
+        //var prefix = ko.extensions.qwin.prefs.displayWhere;
+        //var tree   = document.getElementById("qwin-" + prefix + "-tree");
+        var tree   = ko.extensions.qwin.getElement("tree");
         var paths  = this.getOpenedDocumentsPaths();
 
         tree.view  = new QwinTreeviewPrototype(paths);
@@ -1252,8 +1342,9 @@ ko.extensions.qwin = {};
           try {
             var curpos = ko.extensions.qwin.getCurrentCompletionPos();
           } catch(e) {
-            var prefix = ko.extensions.qwin.prefs.displayWhere;
-            var tree   = document.getElementById("qwin-" + prefix + "-completiontree");
+            //var prefix = ko.extensions.qwin.prefs.displayWhere;
+            //var tree   = document.getElementById("qwin-" + prefix + "-completiontree");
+            var tree   = ko.extensions.qwin.getElement("completiontree");
 
             tree.view = new QwinTreeviewPrototype([]);
             ko.extensions.qwin.completionsShown = '';
@@ -1265,9 +1356,9 @@ ko.extensions.qwin = {};
         if ((ko.extensions.qwin.completionsShown != curpos) || force) {
           var words  = ko.extensions.qwin.getCompletion(completionIgnoreCase);
           //log.warn("reloadCompletionTree "+curpos);
-
-          var prefix = ko.extensions.qwin.prefs.displayWhere;
-          var tree   = document.getElementById("qwin-" + prefix + "-completiontree");
+          //var prefix = ko.extensions.qwin.prefs.displayWhere;
+          //var tree   = document.getElementById("qwin-" + prefix + "-completiontree");
+          var tree   = ko.extensions.qwin.getElement("completiontree");
 
           tree.view  = new QwinTreeviewPrototype(words);
 
@@ -1307,12 +1398,14 @@ ko.extensions.qwin = {};
             }
         }
 
-        var prefix = ko.extensions.qwin.prefs.displayWhere;
-        var tree   = document.getElementById("qwin-" + prefix + "-clipboardtree");
+        //var prefix = ko.extensions.qwin.prefs.displayWhere;
+        //var tree   = document.getElementById("qwin-" + prefix + "-clipboardtree");
+        var tree   = ko.extensions.qwin.getElement("clipboardtree");
 
         tree.view  = new QwinTreeviewPrototype(parts);
     } catch(e) {
       log.exception(e);
+      dump(e);
     }
   }; // end reloadClipboardTree(aPrefix)
 
@@ -1334,7 +1427,7 @@ ko.extensions.qwin = {};
           return;
         }
 
-        if (ko.extensions.qwin.lastCompletionPos == curpos) {
+        if (ko.extensions.qwin.lastCompletionPos != curpos) {
           //if position not changed since last fire
           ko.extensions.qwin.reloadCompletionTree(
             curpos, ko.extensions.qwin.prefs.completionIgnoreCase, false);
@@ -1447,6 +1540,9 @@ ko.extensions.qwin = {};
     try {
         if (!ko.extensions.qwin.prefs.enableClipboard) return;
 
+        timeSvc = Components.classes["@activestate.com/koTime;1"].
+            getService(Components.interfaces.koITime);
+
         var startTime = timeSvc.time();
 
         try {
@@ -1486,11 +1582,13 @@ ko.extensions.qwin = {};
   this.getCurrentlySelectedView = function()
   {
     try {
-      var prefix = ko.extensions.qwin.prefs.displayWhere;
-      var tree   = document.getElementById("qwin-" + prefix + "-tree");
+      //var prefix = ko.extensions.qwin.prefs.displayWhere;
+      //var tree   = document.getElementById("qwin-" + prefix + "-tree");
+      var tree   = ko.extensions.qwin.getElement("tree");
       var uri    = tree.view.getCellValue(tree.currentIndex,
                                           tree.columns.getPrimaryColumn());
 
+      // XXX: that does not work for unsaved docs
       return ko.views.manager.getViewForURI(uri);
     } catch(e) {
       log.exception(e);
@@ -1505,8 +1603,9 @@ ko.extensions.qwin = {};
   this.getCurrentlySelectedCompletion = function()
   {
     try {
-      var prefix = ko.extensions.qwin.prefs.displayWhere;
-      var tree   = document.getElementById("qwin-" + prefix + "-completiontree");
+      //var prefix = ko.extensions.qwin.prefs.displayWhere;
+      //var tree   = document.getElementById("qwin-" + prefix + "-completiontree");
+      var tree   = ko.extensions.qwin.getElement("completiontree");
       var label  = tree.view.getCellValue(tree.currentIndex,
                                           tree.columns.getPrimaryColumn());
 
@@ -1560,8 +1659,9 @@ ko.extensions.qwin = {};
 
       ko.extensions.qwin.lastInsertedWord = newword;
       ko.extensions.qwin.addToClipboardHistory(newword);
-      var prefix    = ko.extensions.qwin.prefs.displayWhere;
-      var txtbox    = document.getElementById("qwin-" + prefix + "-last_inserted");
+      //var prefix    = ko.extensions.qwin.prefs.displayWhere;
+      //var txtbox    = document.getElementById("qwin-" + prefix + "-last_inserted");
+      var txtbox    = ko.extensions.qwin.getElement("last_inserted");
       txtbox.value = newword;
 
       sm.endUndoAction();
@@ -1579,8 +1679,9 @@ ko.extensions.qwin = {};
   this.getCurrentlySelectedClipboard = function()
   {
     try {
-      var prefix = ko.extensions.qwin.prefs.displayWhere;
-      var tree   = document.getElementById("qwin-" + prefix + "-clipboardtree");
+      //var prefix = ko.extensions.qwin.prefs.displayWhere;
+      //var tree   = document.getElementById("qwin-" + prefix + "-clipboardtree");
+      var tree   = ko.extensions.qwin.getElement("clipboardtree");
       var label  = tree.view.getCellValue(tree.currentIndex,
                                           tree.columns.getPrimaryColumn());
 
@@ -1621,7 +1722,7 @@ ko.extensions.qwin = {};
     //var sm = ko.views.manager.currentView.scimoz;
     var curinsert = cv.scimoz.currentPos;
     //ko.views.manager.currentView.document.displayPath;
-    var curdoc = cv.document.displayPath;
+    var curdoc = cv.koDoc.displayPath;
 
     var pos = curdoc+"#"+curinsert;
     return pos;
@@ -1657,8 +1758,9 @@ ko.extensions.qwin = {};
 
   this.onHotkeySwitchTab = function(index) {
     try {
-        var prefix  = ko.extensions.qwin.prefs.displayWhere;
-        var tree    = document.getElementById("qwin-" + prefix + "-tree");
+        //var prefix  = ko.extensions.qwin.prefs.displayWhere;
+        //var tree    = document.getElementById("qwin-" + prefix + "-tree");
+        var tree    = ko.extensions.qwin.getElement("tree");
 
         // TODO: do a LAST tab
         tree.currentIndex = index-1;
@@ -1670,8 +1772,9 @@ ko.extensions.qwin = {};
 
   this.onHotkeyInsertIntelli = function(index) {
     try {
-        var prefix  = ko.extensions.qwin.prefs.displayWhere;
-        var tree    = document.getElementById("qwin-" + prefix + "-completiontree");
+        //var prefix  = ko.extensions.qwin.prefs.displayWhere;
+        //var tree    = document.getElementById("qwin-" + prefix + "-completiontree");
+        var tree   = ko.extensions.qwin.getElement("completiontree");
 
         if (index == 99 && ko.extensions.qwin.lastInsertedWord) {
             var sm = ko.views.manager.currentView.scimoz;
@@ -1697,8 +1800,9 @@ ko.extensions.qwin = {};
 
   this.onHotkeyInsertClipboard = function(index) {
     try {
-        var prefix       = ko.extensions.qwin.prefs.displayWhere;
-        var tree         = document.getElementById("qwin-" + prefix + "-clipboardtree");
+        //var prefix = ko.extensions.qwin.prefs.displayWhere;
+        //var tree   = document.getElementById("qwin-" + prefix + "-clipboardtree");
+        var tree   = ko.extensions.qwin.getElement("clipboardtree");
 
         tree.currentIndex = index-1;
         ko.extensions.qwin.onClipboardTreeDblClick(null);
@@ -1760,11 +1864,11 @@ ko.extensions.qwin = {};
         var view = views[i];
         var viewtype = view.getAttribute("type");
 
-        if(typeof(view.document) == "undefined" || !view.document ||
+        if(typeof(view.koDoc) == "undefined" || !view.koDoc ||
            viewtype == "startpage")
           continue;
 
-        if(current.document.displayPath != view.document.displayPath)
+        if(current.koDoc.displayPath != view.koDoc.displayPath)
           view.close();
       }
     } catch(e) {
@@ -1843,8 +1947,9 @@ ko.extensions.qwin = {};
 
       // Go to the given tabnumber.
 
-      var prefix       = ko.extensions.qwin.prefs.displayWhere;
-      var tree         = document.getElementById("qwin-" + prefix + "-tree");
+      //var prefix    = ko.extensions.qwin.prefs.displayWhere;
+      //var tree      = document.getElementById("qwin-" + prefix + "-tree");
+      var tree      = ko.extensions.qwin.getElement("tree");
 
       if (tabnumber >= 0) {
         tabnumber--;

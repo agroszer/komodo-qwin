@@ -263,7 +263,7 @@
                            control="qwin-completion-minwordlength"/>
                     <textbox id="qwin-completion-minwordlength"
                              preference="pref.completionMinWordLength"
-                             style="width:20px;" disabled="true"/>
+                             style="width:30px;" disabled="true"/>
                   </hbox>
                 </row>
 
@@ -318,7 +318,7 @@
                       label="&enableClipboard.label;"
                       preference="pref.enableClipboard"
                       disabled="true"/>
-            
+
             <row align="center">
               <hbox align="center">
                 <label value="&clipboardItems.label;"

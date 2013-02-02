@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/global/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://mozapps/content/preferences/preferences.css" type="text/css"?>
+<?xml-stylesheet href="chrome://qwin/skin/qwin.css" type="text/css"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is Qwin extension.
+   -
+   - The Initial Developer of the Original Code is Ondrej Donek.
+   - Portions created by the Initial Developer are Copyright (C) 2008
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -   Ondrej Donek, <ondrejd@gmail.com> (Original Author)
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+<!DOCTYPE prefwindow
+[
+  <!ENTITY % prefwindowDTD SYSTEM "chrome://qwin/locale/qwin.dtd">
+  %prefwindowDTD;
+]>
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" type="prefwindow" id="qwinPreferences" windowtype="qwin-dialog" title="&prefWindow.title;" persist="screenX,screenY">
+   <!-- Main preferences -->
+   <prefpane id="paneGeneral" label="&paneGeneral.label;" accesskey="&paneGeneral.key;" onpaneload="ko.extensions.qwin.prefsDlg.onPaneLoad();">
+      <!-- Qwin preferences -->
+      <preferences id="generalPreferences">
+         <preference id="pref.enableQwin" type="bool" name="extensions.qwin.enableQwin" />
+         <preference id="pref.enableCompletion" type="bool" name="extensions.qwin.enableCompletion" />
+         <preference id="pref.enableClipboard" type="bool" name="extensions.qwin.enableClipboard" />
+         <preference id="pref.usedModifier" type="wstring" name="extensions.qwin.usedModifier" />
+         <preference id="pref.usedKeyset" type="wstring" name="extensions.qwin.usedKeyset" />
+         <preference id="pref.usedCompletionModifier" type="wstring" name="extensions.qwin.usedCompletionModifier" />
+         <preference id="pref.usedCompletionKeyset" type="wstring" name="extensions.qwin.usedCompletionKeyset" />
+         <preference id="pref.displayWhere" type="wstring" name="extensions.qwin.displayWhere" />
+         <preference id="pref.pathsDisplay" type="wstring" name="extensions.qwin.pathsDisplay" />
+         <preference id="pref.pathsDisplayLength" type="int" name="extensions.qwin.pathsDisplayLength" />
+         <preference id="pref.highlightCurrent" type="bool" name="extensions.qwin.highlightCurrent" />
+         <preference id="pref.showIcons" type="bool" name="extensions.qwin.showIcons" />
+         <preference id="pref.showWebPages" type="bool" name="extensions.qwin.showWebPages" />
+         <preference id="pref.showStartPage" type="bool" name="extensions.qwin.showStartPage" />
+         <preference id="pref.showActiveProjectOnly" type="bool" name="extensions.qwin.showActiveProjectOnly" />
+         <preference id="pref.showViewsGroups" type="bool" name="extensions.qwin.showViewsGroups" />
+         <!-- XXX Implement this prefs!!! -->
+         <preference id="pref.highlightUnsaved" type="bool" name="extensions.qwin.highlightUnsaved" />
+         <preference id="pref.highlightUnsavedType" type="wstring" name="extensions.qwin.highlightUnsavedType" />
+         <preference id="pref.highlightUnsavedTypeColor" type="wstring" name="extensions.qwin.highlightUnsavedTypeColor" />
+         <preference id="pref.completionMinWordLength" type="int" name="extensions.qwin.completionMinWordLength" />
+         <preference id="pref.completionIgnoreCase" type="bool" name="extensions.qwin.completionIgnoreCase" />
+         <preference id="pref.completionSpeed" type="int" name="extensions.qwin.completionSpeed" />
+         <preference id="pref.completionItems" type="int" name="extensions.qwin.completionItems" />
+         <preference id="pref.completionLookHistory" type="bool" name="extensions.qwin.completionLookHistory" />
+         <preference id="pref.clipboardItems" type="int" name="extensions.qwin.clipboardItems" />
+      </preferences>
+      <script src="chrome://qwin/content/preferences.js" type="application/x-javascript"></script>
+      <checkbox id="qwin-enable-checkbox" class="header" label="&enableQwinPref.label;" accesskey="&enableQwinPref.key;" onclick="ko.extensions.qwin.prefsDlg.updatePane();" preference="pref.enableQwin" />
+      <tabbox>
+         <tabs>
+            <tab label="Tab switching" />
+            <tab label="Completion" />
+            <tab label="Clipboard/Intelli history" />
+         </tabs>
+         <tabpanels>
+            <tabpanel id="qwin-prefwindow-tabtab">
+               <vbox>
+                  <grid>
+                     <columns>
+                        <column />
+                        <column flex="1" />
+                     </columns>
+                     <rows>
+                        <row align="center">
+                           <label value="&usedModifierPref.label;" accesskey="&usedModifierPref.key;" control="qwin-prefwindow-modifier-menulist" />
+                           <menulist id="qwin-prefwindow-modifier-menulist" flex="1" preference="pref.usedModifier" disabled="true">
+                              <menupopup>
+                                 <menuitem label="&usedModifierVal1.label;" value="none" />
+                                 <menuitem label="alt" value="alt" />
+                                 <menuitem label="ctrl" value="ctrl" />
+                                 <menuitem label="shift" value="shift" />
+                                 <menuitem label="alt+shift" value="alt+shift" />
+                                 <menuitem label="ctrl+shift" value="ctrl+shift" />
+                                 <menuitem label="ctrl+alt" value="ctrl+alt" />
+                                 <menuitem label="ctrl+alt+shift" value="ctrl+alt+shift" />
+                              </menupopup>
+                           </menulist>
+                        </row>
+                        <row align="center">
+                           <label value="&usedKeysetPref.label;" accesskey="&usedKeysetPref.key;" control="qwin-prefwindow-keyset-menulist" />
+                           <menulist id="qwin-prefwindow-keyset-menulist" flex="1" preference="pref.usedKeyset" disabled="true">
+                              <menupopup>
+                                 <menuitem label="&usedKeysetVal1.label;" value="numbers" />
+                                 <menuitem label="&usedKeysetVal2.label;" value="fkeys" />
+                              </menupopup>
+                           </menulist>
+                        </row>
+                        <row align="center">
+                           <label value="&displayWherePref.label;" accesskey="&displayWherePref.key;" control="qwin-prefwindow-position-menulist" />
+                           <menulist id="qwin-prefwindow-position-menulist" flex="1" preference="pref.displayWhere" disabled="true">
+                              <menupopup>
+                                 <menuitem label="&displayWhereVal1.label;" value="left" />
+                                 <menuitem label="&displayWhereVal2.label;" value="right" />
+                              </menupopup>
+                           </menulist>
+                        </row>
+                        <row align="center">
+                           <label value="&displayPathsPref.label;" accesskey="&displayPathsPref.key;" control="qwin-prefwindow-display-menulist" />
+                           <menulist id="qwin-prefwindow-display-menulist" flex="1" preference="pref.pathsDisplay" onchange="ko.extensions.qwin.prefsDlg.updateDisplayPathsLengthElm();" disabled="true">
+                              <menupopup>
+                                 <menuitem label="&show_only_filenames.label;" value="file-name-only" />
+                                 <menuitem label="&last_x_chars.label;" value="last-few-chars" />
+                                 <menuitem label="&show_full_paths.label;" value="full-paths" />
+                              </menupopup>
+                           </menulist>
+                        </row>
+                        <row align="center">
+                           <spacer flex="1" />
+                           <hbox align="center">
+                              <label value="&how_many_chars.label;" accesskey="&how_many_chars.key;" control="qwin-prefwindow-pathsLength" />
+                              <textbox id="qwin-prefwindow-pathsLength" preference="pref.pathsDisplayLength" style="width:30px;" disabled="true" />
+                           </hbox>
+                        </row>
+                     </rows>
+                  </grid>
+                  <!-- Other options -->
+                  <separator class="groove" />
+                  <checkbox id="qwin-show_views_groups-check" label="&show_views_groups.label;" accesskey="&show_views_groups.key;" tip="&show_views_groups.tip;" preference="pref.showViewsGroups" disabled="true" />
+                  <separator class="groove" />
+                  <checkbox id="qwin-highlight_current-check" label="&highlight_current.label;" accesskey="&highlight_current.key;" tooltiptext="&highlight_current.tip;" preference="pref.highlightCurrent" disabled="true" />
+                  <!-- XXX Implement this!!! -->
+                  <grid>
+                     <columns>
+                        <column />
+                        <column flex="1" />
+                     </columns>
+                     <rows>
+                        <row align="center">
+                           <checkbox id="qwin-highlight_unsaved-check" label="&highlight_unsaved.label;" accesskey="&highlight_unsaved.key;" preference="pref.highlightUnsaved" onclick="ko.extensions.qwin.prefsDlg.onHighlightUnsavedCheckClick(this);" disabled="true" />
+                           <hbox align="center">
+                              <menulist id="qwin-highlight_unsaved_type-menulist" flex="1" preference="pref.highlightUnsavedType" onchange="ko.extensions.qwin.prefsDlg.onHighlightUnsavedTypeChange(this);" disabled="true">
+                                 <menupopup>
+                                    <menuitem label="&highlight_unsaved.type1;" value="asterix" />
+                                    <menuitem label="&highlight_unsaved.type2;" value="italic" />
+                                    <menuitem label="&highlight_unsaved.type3;" value="underline" />
+                                    <menuitem label="&highlight_unsaved.type4;" value="color" />
+                                 </menupopup>
+                              </menulist>
+                              <!-- XXX Maybe is better another menulist or standalone dialog
+                       -     or smaller button only with icon on top of it.
+                       -->
+                              <button id="qwin-highlight_unsaved_type_color-btn" label="&highlight_unsaved_c.label;" accesskey="&highlight_unsaved_c.key;" type="menu" disabled="true">
+                                 <menupopup>
+                                    <colorpicker id="qwin-highlight_unsaved_type_color-picker" />
+                                 </menupopup>
+                              </button>
+                           </hbox>
+                        </row>
+                     </rows>
+                  </grid>
+                  <checkbox id="qwin-show_icons-check" label="&show_icons.label;" tooltiptext="&show_icons.tip;" preference="pref.showIcons" disabled="true" />
+                  <!--<separator class="groove"/>-->
+                  <checkbox id="qwin-show_web_pages-check" label="&show_web_pages.label;" tooltiptext="&show_web_pages.tip;" preference="pref.showWebPages" disabled="true" />
+                  <checkbox id="qwin-show_start_page-check" label="&show_start_page.label;" tooltiptext="&show_start_page.tip;" preference="pref.showStartPage" disabled="true" />
+                  <!--<separator class="groove"/>-->
+                  <checkbox id="qwin-only_active_project-check" label="&only_active_project.label;" tooltiptext="&only_active_project.tip;" preference="pref.showActiveProjectOnly" disabled="true" />
+               </vbox>
+            </tabpanel>
+            <tabpanel id="qwin-prefwindow-complete">
+               <vbox>
+                  <checkbox id="qwin-enable-completion-checkbox" label="&enableCompletion.label;" preference="pref.enableCompletion" disabled="true" />
+                  <separator class="groove" />
+                  <grid>
+                     <columns>
+                        <column />
+                        <column flex="1" />
+                     </columns>
+                     <rows>
+                        <row align="center">
+                           <label value="&usedModifierPref.label;" accesskey="&usedModifierPref.key;" control="qwin-prefwindow-Completionmodifier-menulist" />
+                           <menulist id="qwin-prefwindow-Completionmodifier-menulist" flex="1" preference="pref.usedCompletionModifier" disabled="true">
+                              <menupopup>
+                                 <menuitem label="&usedModifierVal1.label;" value="none" />
+                                 <menuitem label="alt" value="alt" />
+                                 <menuitem label="ctrl" value="ctrl" />
+                                 <menuitem label="shift" value="shift" />
+                                 <menuitem label="alt+shift" value="alt+shift" />
+                                 <menuitem label="ctrl+shift" value="ctrl+shift" />
+                                 <menuitem label="ctrl+alt" value="ctrl+alt" />
+                                 <menuitem label="ctrl+alt+shift" value="ctrl+alt+shift" />
+                              </menupopup>
+                           </menulist>
+                        </row>
+                        <row align="center">
+                           <label value="&usedKeysetPref.label;" accesskey="&usedKeysetPref.key;" control="qwin-prefwindow-Completionkeyset-menulist" />
+                           <menulist id="qwin-prefwindow-Completionkeyset-menulist" flex="1" preference="pref.usedCompletionKeyset" disabled="true">
+                              <menupopup>
+                                 <menuitem label="&usedKeysetVal1.label;" value="numbers" />
+                                 <menuitem label="&usedKeysetVal2.label;" value="fkeys" />
+                              </menupopup>
+                           </menulist>
+                        </row>
+                        <row align="center">
+                           <spacer flex="1" />
+                           <hbox align="center">
+                              <label value="&completionMinWordLength.label;" control="qwin-completion-minwordlength" />
+                              <textbox id="qwin-completion-minwordlength" preference="pref.completionMinWordLength" style="width:20px;" disabled="true" />
+                           </hbox>
+                        </row>
+                        <row align="center">
+                           <spacer flex="1" />
+                           <hbox align="center">
+                              <label value="&completionSpeed.label;" control="qwin-completion-speed" />
+                              <textbox id="qwin-completion-speed" tooltiptext="&completionSpeed.tip;" preference="pref.completionSpeed" style="width:40px;" disabled="true" />
+                           </hbox>
+                        </row>
+                        <row align="center">
+                           <spacer flex="1" />
+                           <hbox align="center">
+                              <label value="&completionItems.label;" control="qwin-completion-items" />
+                              <textbox id="qwin-completion-items" tooltiptext="&completionItems.tip;" preference="pref.completionItems" style="width:40px;" disabled="true" />
+                           </hbox>
+                        </row>
+                        <row align="center">
+                           <checkbox id="qwin-completion-ignore-case" label="&completionIgnoreCase.label;" tooltiptext="&completionIgnoreCase.tip;" preference="pref.completionIgnoreCase" disabled="true" />
+                           <checkbox id="qwin-completion-look-history" label="&completionLookHistory.label;" tooltiptext="&completionLookHistory.tip;" preference="pref.completionLookHistory" disabled="true" />
+                        </row>
+                        <row align="center"></row>
+                     </rows>
+                  </grid>
+               </vbox>
+            </tabpanel>
+            <tabpanel id="qwin-prefwindow-history">
+               <vbox>
+                  <caption label="&clipboard.label;" />
+                  <checkbox id="qwin-enable-clipboard-checkbox" label="&enableClipboard.label;" preference="pref.enableClipboard" disabled="true" />
+                  <row align="center">
+                     <hbox align="center">
+                        <label value="&clipboardItems.label;" control="qwin-clipboard-items" />
+                        <textbox id="qwin-clipboard-items" tooltiptext="&clipboardItems.tip;" preference="pref.clipboardItems" style="width:40px;" disabled="true" />
+                     </hbox>
+                  </row>
+               </vbox>
+            </tabpanel>
+         </tabpanels>
+      </tabbox>
+   </prefpane>
+</prefwindow>

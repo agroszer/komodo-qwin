@@ -35,6 +35,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+xtk.include("clipboard");
+
 // taken from http://xregexp.com/xregexp.js
 RegExp.escape = function(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -173,9 +175,11 @@ ko.extensions.qwin = {};
 
   //last completion positon (used for timer)
   var lastCompletionPos = '';
+  var lastCompletionPosAt = null;
 
   //completion positon being shown on the treelist
   var completionsShown = '';
+  var completionsShownAt = null;
 
   //completion timer
   var completionTimer = null;
@@ -518,7 +522,7 @@ ko.extensions.qwin = {};
       return '';
   }
 
-  this.getCompletion = function(completionIgnoreCase) {
+  this.getCompletion = function(completionIgnoreCase, curpos) {
     var rv = new Array();
 
     try {
@@ -582,12 +586,13 @@ ko.extensions.qwin = {};
             };
         };
 
+        //half of the timer setting -- plenty to do left
+        var maxTime = (ko.extensions.qwin.prefs.completionSpeed / 1000)/2;
+
         if (words.items.length < maxItems
             && ko.extensions.qwin.prefs.completionLookHistory) {
 
             var views = this.getAllOpenDocumentViews();
-            //half of the timer setting -- plenty to do left
-            var maxTime = (ko.extensions.qwin.prefs.completionSpeed / 1000)/2;
 
             //alert(views);
 
@@ -629,10 +634,13 @@ ko.extensions.qwin = {};
             if (index > maxItems) break;
         }
 
-        var duration = timeSvc.time() - startTime;
 
-        var msg = "getCompletion for "+word+" in "+duration;
-        //log.warn(msg);
+        // see how much time is spent in a lookup:
+        var duration = timeSvc.time() - startTime;
+        if (duration > maxTime) {
+          var msg = "getCompletion for "+word+" in "+duration+" at "+curpos;
+          log.warn(msg);
+        };
 
     }
     catch(e)
@@ -1348,13 +1356,14 @@ ko.extensions.qwin = {};
 
             tree.view = new QwinTreeviewPrototype([]);
             ko.extensions.qwin.completionsShown = '';
+            ko.extensions.qwin.completionsShownAt = null;
             return;
           }
         } else {
           var curpos = currentPos;
         }
         if ((ko.extensions.qwin.completionsShown != curpos) || force) {
-          var words  = ko.extensions.qwin.getCompletion(completionIgnoreCase);
+          var words  = ko.extensions.qwin.getCompletion(completionIgnoreCase, curpos);
           //log.warn("reloadCompletionTree "+curpos);
           //var prefix = ko.extensions.qwin.prefs.displayWhere;
           //var tree   = document.getElementById("qwin-" + prefix + "-completiontree");
@@ -1362,7 +1371,18 @@ ko.extensions.qwin = {};
 
           tree.view  = new QwinTreeviewPrototype(words);
 
+          timeSvc = Components.classes["@activestate.com/koTime;1"].
+              getService(Components.interfaces.koITime);
+          var curTime = timeSvc.time();
+
+          //if (ko.extensions.qwin.completionsShownAt) {
+          //  var msg = 'last reloadCompletionTree '+curpos+' '
+          //            +(curTime-ko.extensions.qwin.completionsShownAt);
+          //  log.warn(msg);
+          //};
+
           ko.extensions.qwin.completionsShown = curpos;
+          ko.extensions.qwin.completionsShownAt = curTime;
         }
     } catch(e) {
       log.exception(e);
@@ -1425,15 +1445,29 @@ ko.extensions.qwin = {};
           ko.extensions.qwin.reloadCompletionTree(
                 null, ko.extensions.qwin.prefs.completionIgnoreCase, true);
           return;
+
+          log.warn('onTimer getCurrentCompletionPos failed');
         }
 
         if (ko.extensions.qwin.lastCompletionPos != curpos) {
-          //if position not changed since last fire
+          //if position changed since last fire
           ko.extensions.qwin.reloadCompletionTree(
             curpos, ko.extensions.qwin.prefs.completionIgnoreCase, false);
         }
 
+        //timeSvc = Components.classes["@activestate.com/koTime;1"].
+        //    getService(Components.interfaces.koITime);
+        //
+        //var curTime = timeSvc.time();
+        //
+        //if (ko.extensions.qwin.lastCompletionPosAt) {
+        //  var msg = 'last onTimer '+curpos+' '
+        //            +(curTime-ko.extensions.qwin.lastCompletionPosAt);
+        //  log.warn(msg);
+        //}
+
         ko.extensions.qwin.lastCompletionPos = curpos;
+        //ko.extensions.qwin.lastCompletionPosAt = curTime;
     } catch(e) {
       log.exception(e);
     }
@@ -1546,8 +1580,6 @@ ko.extensions.qwin = {};
         var startTime = timeSvc.time();
 
         try {
-            xtk.include("clipboard");
-
             var clipTxt = xtk.clipboard.getText();
             // don't store brutally long entries
             if (clipTxt.length > 40960) {
@@ -1567,8 +1599,11 @@ ko.extensions.qwin = {};
         }
 
         var duration = timeSvc.time() - startTime;
-        var msg = "onClipboardTimer in "+duration;
-        //log.warn(msg);
+        var maxTime = (ko.extensions.qwin.prefs.completionSpeed / 1000)/2;
+        if (duration > maxTime) {
+          var msg = "onClipboardTimer in "+duration;
+          log.warn(msg);
+        };
 
     } catch(e) {
       log.exception(e);

@@ -368,6 +368,56 @@
       key="key_qwin_tab_item20"
       desc="qwin: switch to tab 20"
       oncommand="ko.extensions.qwin.onHotkeySwitchTab(20);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item21"
+      key="key_qwin_tab_item21"
+      desc="qwin: switch to tab 21"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(21);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item22"
+      key="key_qwin_tab_item22"
+      desc="qwin: switch to tab 22"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(22);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item23"
+      key="key_qwin_tab_item23"
+      desc="qwin: switch to tab 23"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(23);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item24"
+      key="key_qwin_tab_item24"
+      desc="qwin: switch to tab 24"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(24);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item25"
+      key="key_qwin_tab_item25"
+      desc="qwin: switch to tab 25"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(25);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item26"
+      key="key_qwin_tab_item26"
+      desc="qwin: switch to tab 26"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(26);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item27"
+      key="key_qwin_tab_item27"
+      desc="qwin: switch to tab 27"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(27);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item28"
+      key="key_qwin_tab_item28"
+      desc="qwin: switch to tab 28"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(28);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item29"
+      key="key_qwin_tab_item29"
+      desc="qwin: switch to tab 29"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(29);"/>
+    <broadcaster
+      id="cmd_qwin_tab_item30"
+      key="key_qwin_tab_item30"
+      desc="qwin: switch to tab 30"
+      oncommand="ko.extensions.qwin.onHotkeySwitchTab(30);"/>
 
 
     <broadcaster

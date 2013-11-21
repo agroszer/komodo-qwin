@@ -897,7 +897,7 @@ ko.extensions.qwin = {};
 
       // Add numbers to tabs
       // we do that always for now
-      //this.addTabNumberHandler();
+      this.addTabNumberHandler();
     } catch(e) {
       log.exception(e);
     }
@@ -911,7 +911,7 @@ ko.extensions.qwin = {};
   this.shutdown = function()
   {
     try {
-      //this.removeTabNumberHandler();
+      this.removeTabNumberHandler();
 
       if (ko.extensions.qwin.completionTimer) {
         ko.extensions.qwin.completionTimer.stopInterval();

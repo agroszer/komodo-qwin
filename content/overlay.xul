@@ -54,7 +54,7 @@
           type="application/x-javascript"></script>
   <script src="chrome://komodo/content/library/controller.js"
           type="application/x-javascript"></script>
-  <script src="chrome://qwin/content/overlay.js"
+  <script src="chrome://qwin/content/qwin.js"
           type="application/x-javascript"></script>
 
   <broadcasterset id="broadcasterset_global">

@@ -713,21 +713,34 @@ ko.extensions.qwin = {};
       //log.warn(this.treeitems[aRow]+this.treeitems[aRow].current);
 
       if(this.treeitems[aRow].current) {
-        aProp.AppendElement(this.atomSrv.getAtom("currentView"));
+        if (aProp) {
+          aProp.AppendElement(this.atomSrv.getAtom("currentView"));
+        } else {
+          return "currentView";
+        }
       } else {
         if(ko.extensions.qwin.prefs.highlightCurrent) {
           var currentView = ko.views.manager.currentView;
 
           if(currentView.koDoc.displayPath == this.treeitems[aRow].fullPath)
-            aProp.AppendElement(this.atomSrv.getAtom("currentView"));
+            if (aProp) {
+                aProp.AppendElement(this.atomSrv.getAtom("currentView"));
+            } else {
+                return "currentView";
+            }
         }
       }
 
       if(this.treeitems[aRow].isDirty &&
          ko.extensions.qwin.prefs.highlightUnsaved)
       {
-        aProp.AppendElement(this.atomSrv.getAtom("isDirty"));
+        if (aProp) {
+            aProp.AppendElement(this.atomSrv.getAtom("isDirty"));
+        } else {
+            return "isDirty";
+        }
       }
+      return "";
     },
 
     getImageSrc : function(aRow, aCol)
@@ -884,7 +897,7 @@ ko.extensions.qwin = {};
 
       // Add numbers to tabs
       // we do that always for now
-      this.addTabNumberHandler();
+      //this.addTabNumberHandler();
     } catch(e) {
       log.exception(e);
     }
@@ -898,7 +911,7 @@ ko.extensions.qwin = {};
   this.shutdown = function()
   {
     try {
-      this.removeTabNumberHandler();
+      //this.removeTabNumberHandler();
 
       if (ko.extensions.qwin.completionTimer) {
         ko.extensions.qwin.completionTimer.stopInterval();
@@ -1159,8 +1172,9 @@ ko.extensions.qwin = {};
 
         //freaking nasty solution, but works
         view._qwin_index = index;
-        view.updateLeafName(view);
-
+        try {
+            view.updateLeafName(view);
+        } catch(e) { }
 
 
         var viewtype = view.getAttribute("type");

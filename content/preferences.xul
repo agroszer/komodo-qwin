@@ -61,7 +61,8 @@
         <!-- Qwin preferences -->
         <preferences id="generalPreferences">
           <preference id="pref.enableQwin" type="bool"
-                      name="extensions.qwin.enableQwin"/>
+                      name="extensions.qwin.enableQwin"
+                      onchange="ko.extensions.qwin.prefsDlg.updatePane()"/>
           <preference id="pref.enableCompletion" type="bool"
                       name="extensions.qwin.enableCompletion"/>
           <preference id="pref.enableClipboard" type="bool"
@@ -81,7 +82,7 @@
           <preference id="pref.showStartPage" type="bool"
                       name="extensions.qwin.showStartPage"/>
           <preference id="pref.showActiveProjectOnly" type="bool"
-                      name="extensions.qwin.showActiveProjectOnly"/>
+                      name="extensions.qwin.showActiveProjectOnly" />
           <preference id="pref.showViewsGroups" type="bool"
                       name="extensions.qwin.showViewsGroups"/>
           <!-- XXX Implement this prefs!!! -->
@@ -116,8 +117,8 @@
           <checkbox id="qwin-enable-checkbox" class="header"
                     label="&enableQwinPref.label;"
                     accesskey="&enableQwinPref.key;"
-                    onclick="ko.extensions.qwin.prefsDlg.updatePane();"
-                    preference="pref.enableQwin"/>
+                    preference="pref.enableQwin"
+                    onsyncfrompreference="ko.extensions.qwin.prefsDlg.updatePane()"/>
 
           <groupbox>
             <caption label="&tabSwitching.label;"/>

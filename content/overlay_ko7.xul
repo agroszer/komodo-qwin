@@ -13,10 +13,13 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <ko-pane id="workspace_left_area">
-    <browser type="ko-widget" id="qwinViewbox" label="&qwinTab.label;"
-             position="10" insertbefore="codebrowserviewbox"
+    <browser type="ko-widget"
+             id="qwinViewbox"
+             label="&qwinTab.label;"
+             insertbefore="codebrowserviewbox"
              tab_oncommand="ko.extensions.qwin.update();"
              tab_onfocus="ko.extensions.qwin.update();"
+             icon="koicon://ko-svg/chrome/icomoon/skin/files.svg"
 	         src="chrome://qwin/content/panel.xul"/>
   </ko-pane>
 

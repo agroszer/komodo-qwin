@@ -37,15 +37,6 @@
  *
  ****** END LICENSE BLOCK *****/
 
-/*currentView*/
-/*#qwin-left-tree,
-#qwin-left-clipboardtree,
-#qwin-left-completiontree,
-.panel-label {
-    font-family: 'Lucida Grande', 'Segoe UI', 'Droid Sans', 'Open Sans', sans-serif;
-    font-size: 0.8rem;
-}*/
-
 #qwin-left-tree treechildren::-moz-tree-cell-text(currentView) {
   font-weight:bold!important;
 }

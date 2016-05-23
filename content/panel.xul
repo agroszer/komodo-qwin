@@ -98,6 +98,7 @@
                 class="panel-label desc"/>
        <tree id="qwin-left-clipboardtree" flex="1" hidecolumnpicker="false"
              seltype="single"
+             class="bg_transparent"
              ondblclick="ko.extensions.qwin.onClipboardTreeDblClick();">
          <treecols>
            <treecol id="qwin-left-tree-clipboard-col-index"
@@ -128,6 +129,7 @@
        </hbox>
        <tree id="qwin-left-completiontree" flex="1" hidecolumnpicker="false"
              seltype="single"
+             class="bg_transparent"
              ondblclick="ko.extensions.qwin.onCompletionTreeDblClick();">
          <treecols>
            <treecol id="qwin-left-tree-completion-col-index"

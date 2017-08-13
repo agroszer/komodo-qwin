@@ -45,6 +45,15 @@
   font-weight:bold!important;
 }
 
+/*a bit less line spacing*/
+#qwin-left-tree treechildren:-moz-tree-row,
+#qwin-left-clipboardtree treechildren:-moz-tree-row,
+#qwin-left-completiontree treechildren:-moz-tree-row {
+    line-height: 1.5rem;
+    height: 1.5rem;
+    min-height: 1.5rem;
+}
+
 #qwin-left-tree-col-index,
 #qwin-left-tree-completion-col-index,
 #qwin-left-tree-clipboard-col-index {

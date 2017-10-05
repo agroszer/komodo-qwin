@@ -361,7 +361,7 @@ ko.extensions.qwin = {};
   function QwinTreeitemPrototype(aIndex, aLabel, aFullPath, aBaseName,
                                  aIsDirty, aType, current)
   {
-    this.index    = ko.extensions.qwin.indexMaker(aIndex);
+    this.index    = ko.extensions.qwin.indexToText(aIndex);
     this.label    = aLabel;
     this.fullPath = aFullPath;
     this.baseName = aBaseName;
@@ -1081,6 +1081,15 @@ ko.extensions.qwin = {};
    *
    */
 
+  this.indexToText = function(idx)
+  {
+    if ((0 < idx) && (idx < 10)) {
+      return String.fromCharCode(48 + idx);
+    } else {
+      return String.fromCharCode(97 + idx - 10);
+    }
+  },
+
   this.addTabNumberHandler = function()
   {
       try {
@@ -1100,8 +1109,9 @@ ko.extensions.qwin = {};
           tabset2.updateLeafName = function(view) {
               this._qwin_updateLeafName(view);
               try {
-                  index = view._qwin_index
-                  view.parentNode._tab.label = index+":"+view.parentNode._tab.label;
+                  var index = view._qwin_index
+                  var lbl = ko.extensions.qwin.indexToText(index);
+                  view.parentNode._tab.label = lbl+" "+view.parentNode._tab.label;
               } catch(e) {}
           };
 
@@ -1427,7 +1437,7 @@ ko.extensions.qwin = {};
             parts.reverse();
             var index = 1;
             for (var i in parts) {
-                parts[i].index = this.indexMaker(index);
+                parts[i].index = this.indexToText(index);
                 index ++;
             }
         }
